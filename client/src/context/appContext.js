@@ -36,7 +36,10 @@ import {
   COMPANY_ADD_SUCCESS,
   COMPANY_ADD_REQUEST,
   GET_ALLCOMPANY_REQUEST,
-  GET_ALLCOMPANY_SUCCESS
+  GET_ALLCOMPANY_SUCCESS,
+  ACCEPT_COMPANY_REQUEST,
+  ACCEPT_COMPANY_SUCCESS,
+  ACCEPT_COMPANY_ERROR
 
 } from "./action";
 
@@ -433,6 +436,18 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const approveCompany = async(selected) =>{
+    dispatch({ type: ACCEPT_COMPANY_REQUEST})
+    try {
+      const response = await authFetch.patch(`/company/verifyCompany`,{
+        selectedIds : selected
+      })
+      dispatch({ type: ACCEPT_COMPANY_SUCCESS, payload: { company: response.data.data }})
+    } catch (error) {
+      dispatch({ type: ACCEPT_COMPANY_ERROR, payload:{ error: error}})
+    }
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -466,7 +481,8 @@ const AppProvider = ({ children }) => {
         allComments,
         commentDelete,
         addCompany,
-        getAllCompany
+        getAllCompany,
+        approveCompany
       }}
     >
       {children}

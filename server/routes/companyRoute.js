@@ -5,7 +5,7 @@ const authenticateUser = require("../middlewares/auth.js");
 const router = express.Router();
 
 router.route('/addCompany').post(companyAdd).get(authenticateUser , getAllCompany)
-router.route('/verifyCompany/:Id').patch(authenticateUser, companyApprove)
+router.route('/verifyCompany').patch(authenticateUser, companyApprove)
 router.route('/rejectCompany/:Id').patch(authenticateUser, companyReject)
 
 module.exports = router;

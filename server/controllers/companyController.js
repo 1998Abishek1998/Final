@@ -60,16 +60,19 @@ const getAllCompany = async(req,res) =>{
 
 const companyApprove = async(req,res) =>{
     try {
-       const company = await CompanyRegistered.findOneAndUpdate(
-          { _id: req.params.Id },
-          {
-            $set: { 
-              Status: 'active',
-              IsActive: true
-          },
-          },
-          { new: true }
-        )
+       const { selectedIds } = req.body
+      //  const company = await CompanyRegistered.findOneAndUpdate(
+      //     { _id: req.params.Id },
+      //     {
+      //       $set: { 
+      //         Status: 'active',
+      //         IsActive: true
+      //     },
+      //     },
+      //     { new: true }
+      //   )
+      console.log(selectedIds)
+      const company = await CompanyRegistered.update({ _id : {$eq : selectedIds}})
         return res.status(200).json({
           status: 'success',
           data: company

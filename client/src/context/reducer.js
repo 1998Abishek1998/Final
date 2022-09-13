@@ -37,7 +37,10 @@ import {
   COMPANY_ADD_ERROR,
   GET_ALLCOMPANY_REQUEST,
   GET_ALLCOMPANY_SUCCESS,
-  GET_ALLCOMPANY_ERROR
+  GET_ALLCOMPANY_ERROR,
+  ACCEPT_COMPANY_REQUEST,
+  ACCEPT_COMPANY_SUCCESS,
+  ACCEPT_COMPANY_ERROR
 } from "./action";
 
 import { initialState } from "./appContext";
@@ -318,6 +321,23 @@ const reducer = (state, action) => {
       ...state,
       isLoading: false,
       alertType: "danger",
+    };
+  }
+  if (action.type === ACCEPT_COMPANY_REQUEST) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === ACCEPT_COMPANY_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      company: action.payload.company
+    };
+  }
+
+  if (action.type === ACCEPT_COMPANY_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
     };
   }
   

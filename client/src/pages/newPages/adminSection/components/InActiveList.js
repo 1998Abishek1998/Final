@@ -22,6 +22,8 @@ import { TiTick } from 'react-icons/ti';
 import CompanySearch from './CompanySearch';
 import { BsEye } from 'react-icons/bs';
 import { BiPencil } from 'react-icons/bi';
+import { useDispatch } from 'react-redux';
+import { useAppContext } from '../../../../context/appContext';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -149,7 +151,9 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, value, companyList } = props;
+  const dispatch = useDispatch()
+  const { approveCompany } = useAppContext()
+  const { numSelected, value, companyList, selected } = props;
 
   return (
     <Toolbar
@@ -195,18 +199,17 @@ const EnhancedTableToolbar = (props) => {
         </Tooltip>
         <Tooltip title="Edit">
           <IconButton 
-            onClick={()=>{}}
           >
             <BiPencil/>
           </IconButton>
-        </Tooltip>
-          <Tooltip title="Delete">
+         </Tooltip>
+        {/*  <Tooltip title="Delete">
           <IconButton 
             onClick={()=>{}}
           >
             <DeleteIcon/>
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
         </div>
       ) : (
         ''
@@ -223,7 +226,11 @@ const EnhancedTableToolbar = (props) => {
         {numSelected > 0  ? (
         <Tooltip title="Accept ALl">
           <IconButton 
-            onClick={()=>{}}
+            onClick={(e)=>{
+              e.preventDefault()
+              console.log(selected)
+              dispatch(approveCompany(selected))
+            }}
           >
             <TiTick/>
           </IconButton>
@@ -245,12 +252,10 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable(props) {
   const {companyList, TabIndex} = props
-  console.log(companyList)
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-
   let rowsPerPage = 6
 
   const handleRequestSort = (event, property) => {
@@ -261,7 +266,7 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = companyList.map((n) => n.CompanyName);
+      const newSelected = companyList.map((n) => n._id);
       setSelected(newSelected);
       return;
     }
@@ -271,7 +276,6 @@ export default function EnhancedTable(props) {
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
-
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
@@ -284,7 +288,6 @@ export default function EnhancedTable(props) {
         selected.slice(selectedIndex + 1),
       );
     }
-
     setSelected(newSelected);
   };
 
@@ -302,7 +305,7 @@ export default function EnhancedTable(props) {
   return (
     <Box>
       <Paper >
-        <EnhancedTableToolbar numSelected={selected.length} value={TabIndex} companyList={companyList}/>
+        <EnhancedTableToolbar numSelected={selected.length} value={TabIndex} companyList={companyList} selected={selected}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -323,17 +326,17 @@ export default function EnhancedTable(props) {
               {stableSort(companyList, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.CompanyName);
+                  const isItemSelected = isSelected(row._id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.CompanyName)}
+                      onClick={(event) => handleClick(event, row._id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={companyList.CompanyName}
+                      key={companyList._id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
