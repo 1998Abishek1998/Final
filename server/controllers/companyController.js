@@ -65,6 +65,28 @@ const companyApprove = async(req,res) =>{
           {
             $set: { 
               Status: 'active',
+          },
+          },
+          { new: true }
+        )
+        return res.status(200).json({
+          status: 'success',
+          data: company
+        })
+    } catch (error) {
+        return res.status(500).json({
+          status: 'Failed',
+          message: 'Could not approve the company'
+        })
+    }
+}
+
+const companyActive = async(req,res) =>{
+    try {
+       const company = await CompanyRegistered.findOneAndUpdate(
+          { _id: req.params.Id },
+          {
+            $set: { 
               IsActive: true
           },
           },
@@ -130,5 +152,6 @@ module.exports = {
   companyAdd,
   getAllCompany,
   companyApprove,
-  companyReject
+  companyReject,
+  companyActive
 };

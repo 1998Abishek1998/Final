@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,15 +12,14 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import { TiTick } from 'react-icons/ti';
 import CompanySearch from './CompanySearch';
 import { BsEye } from 'react-icons/bs';
 import { BiPencil } from 'react-icons/bi';
+import { GiCrossMark } from 'react-icons/gi';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -90,10 +88,16 @@ const headCells = [
     disablePadding: false,
     label: 'Status',
   },
+  {
+    id: 'Actions',
+    numeric: false,
+    disablePadding: false,
+    label: 'Status',
+  },
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -102,21 +106,10 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.disablePadding ? 'left' : 'right'}
+            align={'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -140,38 +133,83 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
 };
 
+const handleAccept = (e, row)=>{
+  console.log(e,row,'accept')
+}
+
+const handleView = (e, row)=>{
+  console.log(e,row,'view')
+}
+
+const handleDelete = (e, row)=>{
+  console.log(e,row,'delete')
+}
+
+const handleEdit = (e, row)=>{
+  console.log(e,row,'edit')
+}
+
+const renderAction = (row)=>{
+  return <div>
+      {
+        row.Status === 'pending' && (<Tooltip title="Approve Account">
+          <IconButton 
+            size='small'
+            onClick={(e)=>{ handleAccept(e, row)}}
+          >
+            <TiTick/>
+          </IconButton>
+        </Tooltip>
+        )
+      }
+      {
+        row.IsActive && (
+          <Tooltip title="View">
+          <IconButton 
+            size='small'
+            disabled={!row.IsActive}
+            onClick={(e)=>{ handleView(e, row)}}
+          >
+            <BsEye/>
+          </IconButton>
+        </Tooltip>
+        )
+      }
+      {
+        row.IsActive && (
+          <Tooltip title="Edit">
+          <IconButton 
+            size='small'
+            disabled={!row.IsActive}
+            onClick={(e)=>{ handleEdit(e, row)}}
+          >
+            <BiPencil/>
+          </IconButton>
+        </Tooltip>
+        )
+      }
+          <Tooltip title="Reject">
+          <IconButton 
+            size='small'
+            onClick={(e)=>{ handleDelete(e, row)}}
+          >
+            <GiCrossMark/>
+          </IconButton>
+        </Tooltip>
+  </div>
+}
+
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, value, companyList } = props;
+  const { value, companyList } = props;
 
   return (
     <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
         <Typography
           sx={{ flex: '1 1 100%' }}
           variant="h6"
@@ -182,57 +220,8 @@ const EnhancedTableToolbar = (props) => {
             value === 0 ? 'Pending List' : value === 1 ? 'Active List' : 'All List'
           }
         </Typography>
-      )}
+        <CompanySearch companyList={companyList}/>
       
-      {numSelected === 1 ? (
-        <div style={{ display: 'flex', flexDirection:'row'}}>
-        <Tooltip title="View">
-          <IconButton 
-            onClick={()=>{}}
-          >
-            <BsEye/>
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Edit">
-          <IconButton 
-            onClick={()=>{}}
-          >
-            <BiPencil/>
-          </IconButton>
-        </Tooltip>
-          <Tooltip title="Delete">
-          <IconButton 
-            onClick={()=>{}}
-          >
-            <DeleteIcon/>
-          </IconButton>
-        </Tooltip>
-        </div>
-      ) : (
-        ''
-      )}
-
-      {
-        value === 1 ? <>
-        {numSelected > 0  ? (
-        ''
-      ) : (
-        <CompanySearch companyList={companyList}/>
-      )}
-        </>: <>
-        {numSelected > 0  ? (
-        <Tooltip title="Accept ALl">
-          <IconButton 
-            onClick={()=>{}}
-          >
-            <TiTick/>
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <CompanySearch companyList={companyList}/>
-      )}
-        </>
-      }
     </Toolbar>
   );
 };
@@ -245,10 +234,8 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable(props) {
   const {companyList, TabIndex} = props
-  console.log(companyList)
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
 
   let rowsPerPage = 6
@@ -259,41 +246,11 @@ export default function EnhancedTable(props) {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = companyList.map((n) => n.CompanyName);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -302,7 +259,7 @@ export default function EnhancedTable(props) {
   return (
     <Box>
       <Paper >
-        <EnhancedTableToolbar numSelected={selected.length} value={TabIndex} companyList={companyList}/>
+        <EnhancedTableToolbar value={TabIndex} companyList={companyList}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -310,12 +267,9 @@ export default function EnhancedTable(props) {
             size={'medium'}
           >
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={companyList.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -323,41 +277,29 @@ export default function EnhancedTable(props) {
               {stableSort(companyList, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.CompanyName);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.CompanyName)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={companyList.CompanyName}
-                      selected={isItemSelected}
+                      key={companyList._id}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
+                        align="left"
                       >
                         {row.CompanyName}
                       </TableCell>
-                      <TableCell align="right">{row.CompanyNumber}</TableCell>
-                      <TableCell align="right">{row.Contact}</TableCell>
-                      <TableCell align="right">{row.Email}</TableCell>
-                      <TableCell align="right">{row.Location}</TableCell>
-                      <TableCell align="right">{row.Status}</TableCell>
+                      <TableCell align="left">{row.CompanyNumber}</TableCell>
+                      <TableCell align="left">{row.Contact}</TableCell>
+                      <TableCell align="left">{row.Email}</TableCell>
+                      <TableCell align="left">{row.Location}</TableCell>
+                      <TableCell align="left">{row.Status}</TableCell>
+                      <TableCell align="left">{renderAction(row)}</TableCell>
                     </TableRow>
                   );
                 })}
