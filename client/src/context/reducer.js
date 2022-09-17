@@ -37,7 +37,11 @@ import {
   COMPANY_ADD_ERROR,
   GET_ALLCOMPANY_REQUEST,
   GET_ALLCOMPANY_SUCCESS,
-  GET_ALLCOMPANY_ERROR
+  GET_ALLCOMPANY_ERROR,
+  COMPANY_APPROVE_REQUEST,
+  COMPANY_APPROVE_SUCCESS,
+  COMPANY_REJECT_REQUEST,
+  COMPANY_REJECT_SUCCESS
 } from "./action";
 
 import { initialState } from "./appContext";
@@ -320,7 +324,30 @@ const reducer = (state, action) => {
       alertType: "danger",
     };
   }
-  
+/////
+  if (action.type === COMPANY_APPROVE_REQUEST) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === COMPANY_APPROVE_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      approvedCompany: action.payload.company
+    };
+  }
+
+
+  if (action.type === COMPANY_REJECT_REQUEST) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === COMPANY_REJECT_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      alertType: "success",
+      rejectedCompany: action.payload.company
+    };
+  }
 
   throw new Error(`no such action: ${action.type}`);
 };

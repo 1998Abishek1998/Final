@@ -36,7 +36,11 @@ import {
   COMPANY_ADD_SUCCESS,
   COMPANY_ADD_REQUEST,
   GET_ALLCOMPANY_REQUEST,
-  GET_ALLCOMPANY_SUCCESS
+  GET_ALLCOMPANY_SUCCESS,
+  COMPANY_APPROVE_REQUEST,
+  COMPANY_APPROVE_SUCCESS,
+  COMPANY_REJECT_REQUEST,
+  COMPANY_REJECT_SUCCESS
 
 } from "./action";
 
@@ -433,14 +437,34 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const approveCompany = async(Id)=>{
+    dispatch({type: COMPANY_APPROVE_REQUEST})
+    try {
+      const response =  await authFetch.patch(`/company/verifyCompany/${Id}`)
+      dispatch({ type: COMPANY_APPROVE_SUCCESS, payload: { approvedCompany: response.data.data}})
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
+
+  const rejectCompany = async(Id)=>{
+    dispatch({type: COMPANY_REJECT_REQUEST})
+    try {
+      const response =  await authFetch.patch(`/company/rejectCompany/${Id}`)
+      dispatch({ type: COMPANY_REJECT_SUCCESS, payload: { rejectedCompany: response.data.data}})
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
+
   return (
     <AppContext.Provider
       value={{
         ...state,
         displayAlert,
-
+        approveCompany,
         setupUser,
-
+        rejectCompany,
         handleChange,
         clearValues,
 
@@ -466,7 +490,8 @@ const AppProvider = ({ children }) => {
         allComments,
         commentDelete,
         addCompany,
-        getAllCompany
+        getAllCompany,
+        approveCompany
       }}
     >
       {children}
