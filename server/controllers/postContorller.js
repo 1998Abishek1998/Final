@@ -54,8 +54,9 @@ const getPosts = async (req, res) => {
   
   try {
     const following = await User.findOne({ _id: req.user.userId });
+    console.log(following)
     const posts = await Post.find({
-      userid:[...following.following,req.user.userId],
+      userid:[...following.CompanyId,req.user.userId],
     })
       .populate("userid likesid", "profilePicture username location")
       .sort("-createdAt");

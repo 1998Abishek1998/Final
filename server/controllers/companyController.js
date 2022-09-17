@@ -75,7 +75,7 @@ const companyApprove = async(req,res) =>{
 
         const output = `
             <h5>Welcome to Winkle Media ${CompanyName}</h5>
-            <span>You have sucessfully registered in our system. Click the route for further process <a href='localhost:3000/company/registration'>localhost:3000/company/registration</a></span>
+            <span>You have sucessfully registered in our system. Click the route for further process <a href='http://localhost:3000/owner/${req.params.Id}'>Register Owner</a></span>
         `
         const transporter = nodemailer.createTransport({
             service:'gmail',

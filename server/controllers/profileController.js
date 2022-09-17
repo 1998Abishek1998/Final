@@ -3,9 +3,7 @@ const User = require("../models/User.js");
 
 const { BAD_REQUESTError } = require("../errors/index.js");
 const { StatusCodes } = require("http-status-codes");
-const checkPermissions = require("../utils/checkPermissions.js");
 
-const { fileURLToPath } = require("url");
 const path = require("path");
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -19,109 +17,7 @@ const userProfile = async (req, res) => {
     .populate("userid likesid", "profilePicture username location")
     .sort("-createdAt");
 
-  const followings = await User.find({ _id: [...user.following] });
-  const followers = await User.find({ _id: [...user.followers] });
-
-  res.status(StatusCodes.OK).json({ user, post, followings, followers });
-};
-
-const followUser = async (req, res) => {
-  const user = await User.find({
-    _id: req.params.id,
-    followers: req.user.userId,
-  });
-
-  if (user.length === 0) {
-    const followersUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $push: { followers: req.user.userId },
-      },
-      { new: true }
-    );
-    const followingUser = await User.findOneAndUpdate(
-      { _id: req.user.userId },
-      {
-        $push: { following: req.params.id },
-      },
-      { new: true }
-    );
-    let addFriend1 = followingUser.following.some(item => followingUser.followers.includes(item))
-    if(addFriend1){
-      await User.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $push: { friends: req.user.userId },
-        },
-        { new: true }
-      );
-      await User.findOneAndUpdate(
-        { _id: req.user.userId },
-        {
-          $push: { friends: req.params.id },
-        },
-        { new: true }
-      );
-    }
-    res.status(StatusCodes.OK).json({ success: true });
-  }
-  res.status(StatusCodes.OK).json({ success: false });
-};
-
-const unfollowUser = async (req, res) => {
-  console.log(req.params.id);
-  const user = await User.find({
-    _id: req.params.id,
-    followers: req.user.userId,
-  });
-
-  if (user.length > 0) {
-    const followers = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $pull: { followers: req.user.userId },
-      },
-      { new: true }
-    );
-    const following = await User.findOneAndUpdate(
-      { _id: req.user.userId },
-      {
-        $pull: { following: req.params.id },
-      },
-      { new: true }
-    );
-    res.status(StatusCodes.OK).json({ success: false, followers, following });
-  }
-  res.status(StatusCodes.OK).json({ success: true });
-};
-
-const removefollower = async (req, res) => {
-  const user = await User.find({
-    _id: req.user.userId,
-    followers: req.params.id,
-  });
-  if (!user) {
-    throw new BAD_REQUESTError("user not found");
-  }
-
-  if (user.length > 0) {
-    const followers = await User.findOneAndUpdate(
-      { _id: req.user.userId },
-      {
-        $pull: { followers: req.params.id, friends:req.params.id },
-      },
-      { new: true }
-    );
-    const following = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $pull: { following: req.user.userId, friends: req.user.userId },
-      },
-      { new: true }
-    );
-    res.status(StatusCodes.OK).json({ success: false, followers, following });
-  }
-  res.status(StatusCodes.OK).json({ success: true });
+  res.status(StatusCodes.OK).json({ user, post});
 };
 
 const searchProfile = async (req, res) => {
@@ -228,9 +124,6 @@ const updateProfile = async (req, res) => {
 
 module.exports = {
   userProfile,
-  followUser,
-  unfollowUser,
   searchProfile,
   updateProfile,
-  removefollower,
 };

@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
           minlength: 4,
           trim: true,
         },
+        companyId: [{ type: mongoose.Schema.Types.ObjectId, ref: "CompanyRegistration" }],
         email: {
           type: String,
           required: [true, "Please provide email"],
@@ -46,8 +47,6 @@ const userSchema = new mongoose.Schema(
           type: Boolean,
           default: false
         },
-        followers: [{ type: mongoose.Types.ObjectId, ref: "User" }],
-        following: [{ type: mongoose.Types.ObjectId, ref: "User" }],
         username: { type: String },
         password: { type: String, required: [true, "can't be blank"] },
         companyId: { type: mongoose.Types.ObjectId, ref: "CompanyRegistration"},

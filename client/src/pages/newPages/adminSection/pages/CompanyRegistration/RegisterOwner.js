@@ -1,27 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Wrapper from '../../../../../assets/wrappers/RegisterPage'
 import {FormRow,Alert} from '../../../../../components'
 
-import {useDispatch} from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAppContext } from '../../../../../context/appContext';
 
 const RegisterOwner = () => {
   const { Id } = useParams()
-  const {setupUser,isLoading,showAlert} = useAppContext()
+  const {setupUser,isLoading,showAlert, user} = useAppContext()
     const [email,setEmail] = useState()
     const [image, setImage] = useState()
     const [location, setLocation] = useState()
     const [password, setPassword] = useState()
     const [name, setname] = useState()
-    const role = 'owner'
+    const role = 2
     const [username, setusername] = useState()
 
     const navigate = useNavigate();
-    const dispatch = useDispatch()
 
-
+    useEffect(() => {
+      if (user) {
+        setTimeout(() => {
+          if(user.role === 1) navigate('/admin-pannel')
+          else navigate("/user");
+        }, 3000);
+      }
+    }, [user, navigate]);
 
     const FileChange = async (e) =>{
         var image = await e.target.files[0]
@@ -49,10 +54,6 @@ const RegisterOwner = () => {
             alertText:'User Created!: Redirection...'
           })
         }
-     
-      const handleChange = (e) =>{
-        // formData.append([e.target.name],e.target.value)       
-      }
 
     return (
 
