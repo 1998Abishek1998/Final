@@ -15,11 +15,10 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { visuallyHidden } from '@mui/utils';
-import { TiTick } from 'react-icons/ti';
 import CompanySearch from './CompanySearch';
 import { BsEye } from 'react-icons/bs';
-import { BiPencil } from 'react-icons/bi';
-import { GiCrossMark } from 'react-icons/gi';
+import { Modal } from '@mui/material';
+import AcceptModal from './CompanyModal';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -138,72 +137,6 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
 };
 
-const handleAccept = (e, row)=>{
-  console.log(e,row,'accept')
-}
-
-const handleView = (e, row)=>{
-  console.log(e,row,'view')
-}
-
-const handleDelete = (e, row)=>{
-  console.log(e,row,'delete')
-}
-
-const handleEdit = (e, row)=>{
-  console.log(e,row,'edit')
-}
-
-const renderAction = (row)=>{
-  return <div>
-      {
-        row.Status === 'pending' && (<Tooltip title="Approve Account">
-          <IconButton 
-            size='small'
-            onClick={(e)=>{ handleAccept(e, row)}}
-          >
-            <TiTick/>
-          </IconButton>
-        </Tooltip>
-        )
-      }
-      {
-        row.IsActive && (
-          <Tooltip title="View">
-          <IconButton 
-            size='small'
-            disabled={!row.IsActive}
-            onClick={(e)=>{ handleView(e, row)}}
-          >
-            <BsEye/>
-          </IconButton>
-        </Tooltip>
-        )
-      }
-      {
-        row.IsActive && (
-          <Tooltip title="Edit">
-          <IconButton 
-            size='small'
-            disabled={!row.IsActive}
-            onClick={(e)=>{ handleEdit(e, row)}}
-          >
-            <BiPencil/>
-          </IconButton>
-        </Tooltip>
-        )
-      }
-          <Tooltip title="Reject">
-          <IconButton 
-            size='small'
-            onClick={(e)=>{ handleDelete(e, row)}}
-          >
-            <GiCrossMark/>
-          </IconButton>
-        </Tooltip>
-  </div>
-}
-
 const EnhancedTableToolbar = (props) => {
   const { value, companyList } = props;
 
@@ -237,6 +170,8 @@ export default function EnhancedTable(props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+  const [ modalRowData, setModalRowData] = React.useState({})
 
   let rowsPerPage = 6
 
@@ -250,6 +185,17 @@ export default function EnhancedTable(props) {
     setPage(newPage);
   };
 
+  const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -299,7 +245,19 @@ export default function EnhancedTable(props) {
                       <TableCell align="left">{row.Email}</TableCell>
                       <TableCell align="left">{row.Location}</TableCell>
                       <TableCell align="left">{row.Status}</TableCell>
-                      <TableCell align="left">{renderAction(row)}</TableCell>
+                      <TableCell align="left">
+                        <Tooltip title="View">
+                          <IconButton 
+                            size='small'
+                            onClick={(e)=> {
+                              setOpen(true)
+                              setModalRowData(row)
+                            }}
+                          >
+                            <BsEye/>
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -323,6 +281,19 @@ export default function EnhancedTable(props) {
           onPageChange={handleChangePage}
         />
       </Paper>
+      
+    <div>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <AcceptModal data={modalRowData} setOpen={setOpen}/>
+        </Box>
+      </Modal>
+    </div>
     </Box>
   );
 }

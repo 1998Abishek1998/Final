@@ -4,8 +4,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useAppContext } from '../../../../context/appContext';
-import InActiveList from '../components/InActiveList';
+import { useAppContext } from '../../../../../context/appContext';
+import InActiveList from './components/InActiveList';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,10 +53,8 @@ export default function CompanyDetails() {
 
   React.useEffect(()=>{
     if(company){
-      let actCompany = company.filter((itm) => itm.IsActive)
-      console.log(actCompany,'activeCompany')
+      let actCompany = company.filter((itm) => itm.Status === 'active')
       let pendingCompany = company.filter((itm) => itm.Status === 'pending' )
-      console.log(pendingCompany,'pending')
       setPendingCompany(pendingCompany)
       setAllCompany(company)
       setInActiveCompany(actCompany)
