@@ -1,13 +1,14 @@
 const { StatusCodes } = require("http-status-codes");
 const User = require("../models/User");
 const path = require("path");
+const multer = require('multer')
 const { BAD_REQUESTError, UnAuthenticatedError } = require("../errors/index.js");
 const CompanyRegistered = require("../models/CompanyRegistered");
 
 const register = async (req, res) => {
  
   const { name, location, email, password,username, companyId, role } = req.body;
-
+  console.log({ name, location, email, password,username, companyId, role } )
   if(!name || !username || !location || !email || !password || !companyId){
     throw new BAD_REQUESTError("please provide all the values");
   }
@@ -31,12 +32,19 @@ const register = async (req, res) => {
     const profilePath = req.files.profilePicture;
     const src = `/uploads/${profilePath.name}`;
     const profilePicture = src || "hello";
-
-    const imagePath = path.join(
-      __dirname,
-      "../public/uploads/" + `${profilePath.name}`
-    );
-    await profilePath.mv(imagePath);
+    
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null,'../uploads')
+      },
+      filename: (req, file, cb) =>{
+        cb(null, Date.now() + path.extname(file.originalname))
+      }
+    })
+    
+    const upload = multer({ storage: storage})
+    
+    upload.single('image')
     
     const user = await User.create({
       name,

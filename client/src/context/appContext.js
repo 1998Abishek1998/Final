@@ -149,7 +149,7 @@ const AppProvider = ({ children }) => {
   const setupUser = async ({ currentUser, endPoint, alertText }) => {
     dispatch({ type: SETUP_USER_BEGIN });
 
-    const { name, location, email, password, profilePicture, username } =
+    const { name, location, email, password, image, username, Id, role } =
       currentUser;
 
     let formData = new FormData();
@@ -159,7 +159,9 @@ const AppProvider = ({ children }) => {
     formData.append("location", location);
     formData.append("email", email);
     formData.append("password", password);
-    formData.append("profilePicture", profilePicture);
+    formData.append("profilePicture", image);
+    formData.append("companyId", Id);
+    formData.append("role", role);
 
     try {
       const { data } = await authFetch.post(`/auth/${endPoint}`, formData);

@@ -18,9 +18,7 @@ const companyRegistration = mongoose.Schema({
       required: [true, 'Please provide company location.']
     },
     CompanyName:{ type: String, required: [true, 'Please enter company name.']},
-    CompanyHead : [{ type: mongoose.Types.ObjectId, ref: "User" }],
-    CompanyManagers : [{ type: mongoose.Types.ObjectId, ref: "User" }],
-    CompanyEmployees: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+    CompanyOwner : [{ type: mongoose.Types.ObjectId, ref: "User" }],
     Contact:{
       type: Number,
       required: [true, 'Please enter company phone number']

@@ -3,13 +3,13 @@ import { useState } from 'react'
 
 import Wrapper from '../../assets/wrappers/RegisterPage'
 import {FormRow,Alert} from '../../components'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAppContext } from '../../context/appContext'
 
 
 const CompanyRegister = () => {
     const {addCompany, showAlert} = useAppContext()
-
+    const {Id} = useParams()
     const [email, setEmail] = useState(null)
     const [companyName, setcompanyName] = useState(null)
     const [companyNumber, setcompanyNumber] = useState(null)
