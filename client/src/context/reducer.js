@@ -38,16 +38,10 @@ import {
   GET_ALLCOMPANY_REQUEST,
   GET_ALLCOMPANY_SUCCESS,
   GET_ALLCOMPANY_ERROR,
-<<<<<<< HEAD
-  ACCEPT_COMPANY_REQUEST,
-  ACCEPT_COMPANY_SUCCESS,
-  ACCEPT_COMPANY_ERROR
-=======
   COMPANY_APPROVE_REQUEST,
   COMPANY_APPROVE_SUCCESS,
   COMPANY_REJECT_REQUEST,
   COMPANY_REJECT_SUCCESS
->>>>>>> origin/mongoDb-setup
 } from "./action";
 
 import { initialState } from "./appContext";
@@ -330,26 +324,6 @@ const reducer = (state, action) => {
       alertType: "danger",
     };
   }
-<<<<<<< HEAD
-  if (action.type === ACCEPT_COMPANY_REQUEST) {
-    return { ...state, isLoading: true };
-  }
-  if (action.type === ACCEPT_COMPANY_SUCCESS) {
-    return {
-      ...state,
-      isLoading: false,
-      company: action.payload.company
-    };
-  }
-
-  if (action.type === ACCEPT_COMPANY_ERROR) {
-    return {
-      ...state,
-      isLoading: false,
-    };
-  }
-  
-=======
 /////
   if (action.type === COMPANY_APPROVE_REQUEST) {
     return { ...state, isLoading: true };
@@ -374,7 +348,6 @@ const reducer = (state, action) => {
       rejectedCompany: action.payload.company
     };
   }
->>>>>>> origin/mongoDb-setup
 
   throw new Error(`no such action: ${action.type}`);
 };

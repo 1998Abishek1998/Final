@@ -37,16 +37,10 @@ import {
   COMPANY_ADD_REQUEST,
   GET_ALLCOMPANY_REQUEST,
   GET_ALLCOMPANY_SUCCESS,
-<<<<<<< HEAD
-  ACCEPT_COMPANY_REQUEST,
-  ACCEPT_COMPANY_SUCCESS,
-  ACCEPT_COMPANY_ERROR
-=======
   COMPANY_APPROVE_REQUEST,
   COMPANY_APPROVE_SUCCESS,
   COMPANY_REJECT_REQUEST,
   COMPANY_REJECT_SUCCESS
->>>>>>> origin/mongoDb-setup
 
 } from "./action";
 
@@ -446,9 +440,8 @@ const AppProvider = ({ children }) => {
   const approveCompany = async(Id)=>{
     dispatch({type: COMPANY_APPROVE_REQUEST})
     try {
-      const response =  await authFetch.patch(`/company/activateCompany/${Id}`)
+      const response =  await authFetch.patch(`/company/verifyCompany/${Id}`)
       dispatch({ type: COMPANY_APPROVE_SUCCESS, payload: { approvedCompany: response.data.data}})
-      getAllCompany()
     } catch (error) {
       console.log(error.response)
     }

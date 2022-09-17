@@ -17,14 +17,8 @@ import Tooltip from '@mui/material/Tooltip';
 import { visuallyHidden } from '@mui/utils';
 import CompanySearch from './CompanySearch';
 import { BsEye } from 'react-icons/bs';
-<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
-import { BiPencil } from 'react-icons/bi';
-import { useDispatch } from 'react-redux';
-import { useAppContext } from '../../../../context/appContext';
-=======
 import { Modal } from '@mui/material';
 import AcceptModal from './CompanyModal';
->>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -144,13 +138,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
-  const dispatch = useDispatch()
-  const { approveCompany } = useAppContext()
-  const { numSelected, value, companyList, selected } = props;
-=======
   const { value, companyList } = props;
->>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
 
   return (
     <Toolbar
@@ -167,61 +155,6 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
         <CompanySearch companyList={companyList}/>
       
-<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
-      {numSelected === 1 ? (
-        <div style={{ display: 'flex', flexDirection:'row'}}>
-        <Tooltip title="View">
-          <IconButton 
-            onClick={()=>{}}
-          >
-            <BsEye/>
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Edit">
-          <IconButton 
-          >
-            <BiPencil/>
-          </IconButton>
-         </Tooltip>
-        {/*  <Tooltip title="Delete">
-          <IconButton 
-            onClick={()=>{}}
-          >
-            <DeleteIcon/>
-          </IconButton>
-        </Tooltip> */}
-        </div>
-      ) : (
-        ''
-      )}
-
-      {
-        value === 1 ? <>
-        {numSelected > 0  ? (
-        ''
-      ) : (
-        <CompanySearch companyList={companyList}/>
-      )}
-        </>: <>
-        {numSelected > 0  ? (
-        <Tooltip title="Accept ALl">
-          <IconButton 
-            onClick={(e)=>{
-              e.preventDefault()
-              console.log(selected)
-              dispatch(approveCompany(selected))
-            }}
-          >
-            <TiTick/>
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <CompanySearch companyList={companyList}/>
-      )}
-        </>
-      }
-=======
->>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
     </Toolbar>
   );
 };
@@ -237,12 +170,9 @@ export default function EnhancedTable(props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
-<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
-=======
   const [open, setOpen] = React.useState(false);
   const [ modalRowData, setModalRowData] = React.useState({})
 
->>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
   let rowsPerPage = 6
 
   const handleRequestSort = (event, property) => {
@@ -251,36 +181,6 @@ export default function EnhancedTable(props) {
     setOrderBy(property);
   };
 
-<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = companyList.map((n) => n._id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
-  };
-
-=======
->>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -305,11 +205,7 @@ export default function EnhancedTable(props) {
   return (
     <Box>
       <Paper >
-<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
-        <EnhancedTableToolbar numSelected={selected.length} value={TabIndex} companyList={companyList} selected={selected}/>
-=======
         <EnhancedTableToolbar value={TabIndex} companyList={companyList}/>
->>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -327,26 +223,13 @@ export default function EnhancedTable(props) {
               {stableSort(companyList, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
-                  const isItemSelected = isSelected(row._id);
-=======
->>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
-                      onClick={(event) => handleClick(event, row._id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={companyList._id}
-                      selected={isItemSelected}
-=======
-                      tabIndex={-1}
-                      key={companyList._id}
->>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
                     >
                       <TableCell
                         component="th"

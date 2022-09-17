@@ -1,4 +1,5 @@
 const CompanyRegistered = require("../models/CompanyRegistered.js");
+const nodemailer = require('nodemailer')
 
 const companyAdd = async(req,res) =>{
   try {
@@ -18,7 +19,6 @@ const companyAdd = async(req,res) =>{
         message: 'This company is already registered'
       })
     }
-    console.log({ Email, IsPan, CompanyNumber, CompanyName, Location, Contact })
     await CompanyRegistered.create({
       Email: Email,
       IsPan: IsPan ? IsPan : false,
@@ -60,34 +60,53 @@ const getAllCompany = async(req,res) =>{
 
 const companyApprove = async(req,res) =>{
     try {
-<<<<<<< HEAD
-       const { selectedIds } = req.body
-      //  const company = await CompanyRegistered.findOneAndUpdate(
-      //     { _id: req.params.Id },
-      //     {
-      //       $set: { 
-      //         Status: 'active',
-      //         IsActive: true
-      //     },
-      //     },
-      //     { new: true }
-      //   )
-      console.log(selectedIds)
-      const company = await CompanyRegistered.update({ _id : {$eq : selectedIds}})
-=======
        const company = await CompanyRegistered.findOneAndUpdate(
           { _id: req.params.Id },
           {
             $set: { 
-              Status: 'active',
+              IsActive: true
           },
           },
           { new: true }
         )
+
+          if(company){
+            const {CompanyName, Email} = company
+
+        const output = `
+            <h5>Welcome to Winkle Media ${CompanyName}</h5>
+            <span>You have sucessfully registered in our system. Click the route for further process <a href='localhost:3000/company/registration'>localhost:3000/company/registration</a></span>
+        `
+        const transporter = nodemailer.createTransport({
+            service:'gmail',
+            auth: {
+                user: process.env.EMAIL_HOST_USER,
+                pass: process.env.EMAIL_HOST_PASSWORD
+            }
+        });
+        
+          // send mail with defined transport object
+          let info = transporter.sendMail({
+            from: `WinkleMedia ${process.env.EMAIL_HOST_USER}`, // sender address
+            to: `${Email}`, // list of receivers
+            subject: "Node Test ✔", // Subject line
+            text: '', // plain text body
+            html: output, // html body
+          },function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+
+          console.log("Message sent: %s", info.messageId);
+
         return res.status(200).json({
           status: 'success',
           data: company
         })
+      }
     } catch (error) {
         return res.status(500).json({
           status: 'Failed',
@@ -102,12 +121,11 @@ const companyActive = async(req,res) =>{
           { _id: req.params.Id },
           {
             $set: { 
-              IsActive: true
+              Status: 'active'
           },
           },
           { new: true }
         )
->>>>>>> origin/mongoDb-setup
         return res.status(200).json({
           status: 'success',
           data: company

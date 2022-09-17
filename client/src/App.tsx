@@ -46,6 +46,7 @@ function App() {
                   <Route index element={<Profile />} />
                 </Route>
                 <Route path="/" element={<Landing/>} />
+                <Route path="/company/registration" element={<Landing/>} />
                 <Route
                   path='/admin-pannel'
                   element={
