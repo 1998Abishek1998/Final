@@ -60,6 +60,7 @@ const getAllCompany = async(req,res) =>{
 
 const companyApprove = async(req,res) =>{
     try {
+<<<<<<< HEAD
        const { selectedIds } = req.body
       //  const company = await CompanyRegistered.findOneAndUpdate(
       //     { _id: req.params.Id },
@@ -73,6 +74,40 @@ const companyApprove = async(req,res) =>{
       //   )
       console.log(selectedIds)
       const company = await CompanyRegistered.update({ _id : {$eq : selectedIds}})
+=======
+       const company = await CompanyRegistered.findOneAndUpdate(
+          { _id: req.params.Id },
+          {
+            $set: { 
+              Status: 'active',
+          },
+          },
+          { new: true }
+        )
+        return res.status(200).json({
+          status: 'success',
+          data: company
+        })
+    } catch (error) {
+        return res.status(500).json({
+          status: 'Failed',
+          message: 'Could not approve the company'
+        })
+    }
+}
+
+const companyActive = async(req,res) =>{
+    try {
+       const company = await CompanyRegistered.findOneAndUpdate(
+          { _id: req.params.Id },
+          {
+            $set: { 
+              IsActive: true
+          },
+          },
+          { new: true }
+        )
+>>>>>>> origin/mongoDb-setup
         return res.status(200).json({
           status: 'success',
           data: company
@@ -133,5 +168,6 @@ module.exports = {
   companyAdd,
   getAllCompany,
   companyApprove,
-  companyReject
+  companyReject,
+  companyActive
 };

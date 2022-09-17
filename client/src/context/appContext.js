@@ -37,9 +37,16 @@ import {
   COMPANY_ADD_REQUEST,
   GET_ALLCOMPANY_REQUEST,
   GET_ALLCOMPANY_SUCCESS,
+<<<<<<< HEAD
   ACCEPT_COMPANY_REQUEST,
   ACCEPT_COMPANY_SUCCESS,
   ACCEPT_COMPANY_ERROR
+=======
+  COMPANY_APPROVE_REQUEST,
+  COMPANY_APPROVE_SUCCESS,
+  COMPANY_REJECT_REQUEST,
+  COMPANY_REJECT_SUCCESS
+>>>>>>> origin/mongoDb-setup
 
 } from "./action";
 
@@ -436,15 +443,24 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
-  const approveCompany = async(selected) =>{
-    dispatch({ type: ACCEPT_COMPANY_REQUEST})
+  const approveCompany = async(Id)=>{
+    dispatch({type: COMPANY_APPROVE_REQUEST})
     try {
-      const response = await authFetch.patch(`/company/verifyCompany`,{
-        selectedIds : selected
-      })
-      dispatch({ type: ACCEPT_COMPANY_SUCCESS, payload: { company: response.data.data }})
+      const response =  await authFetch.patch(`/company/activateCompany/${Id}`)
+      dispatch({ type: COMPANY_APPROVE_SUCCESS, payload: { approvedCompany: response.data.data}})
+      getAllCompany()
     } catch (error) {
-      dispatch({ type: ACCEPT_COMPANY_ERROR, payload:{ error: error}})
+      console.log(error.response)
+    }
+  }
+
+  const rejectCompany = async(Id)=>{
+    dispatch({type: COMPANY_REJECT_REQUEST})
+    try {
+      const response =  await authFetch.patch(`/company/rejectCompany/${Id}`)
+      dispatch({ type: COMPANY_REJECT_SUCCESS, payload: { rejectedCompany: response.data.data}})
+    } catch (error) {
+      console.log(error.response)
     }
   }
 
@@ -453,9 +469,9 @@ const AppProvider = ({ children }) => {
       value={{
         ...state,
         displayAlert,
-
+        approveCompany,
         setupUser,
-
+        rejectCompany,
         handleChange,
         clearValues,
 

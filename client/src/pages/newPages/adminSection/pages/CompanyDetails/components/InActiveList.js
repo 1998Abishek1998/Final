@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,17 +12,19 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
-import { TiTick } from 'react-icons/ti';
 import CompanySearch from './CompanySearch';
 import { BsEye } from 'react-icons/bs';
+<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
 import { BiPencil } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
 import { useAppContext } from '../../../../context/appContext';
+=======
+import { Modal } from '@mui/material';
+import AcceptModal from './CompanyModal';
+>>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -92,10 +93,16 @@ const headCells = [
     disablePadding: false,
     label: 'Status',
   },
+  {
+    id: 'Actions',
+    numeric: false,
+    disablePadding: false,
+    label: 'Status',
+  },
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -104,21 +111,10 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.disablePadding ? 'left' : 'right'}
+            align={'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -142,40 +138,23 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
+<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
   const dispatch = useDispatch()
   const { approveCompany } = useAppContext()
   const { numSelected, value, companyList, selected } = props;
+=======
+  const { value, companyList } = props;
+>>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
 
   return (
     <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
         <Typography
           sx={{ flex: '1 1 100%' }}
           variant="h6"
@@ -186,8 +165,9 @@ const EnhancedTableToolbar = (props) => {
             value === 0 ? 'Pending List' : value === 1 ? 'Active List' : 'All List'
           }
         </Typography>
-      )}
+        <CompanySearch companyList={companyList}/>
       
+<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
       {numSelected === 1 ? (
         <div style={{ display: 'flex', flexDirection:'row'}}>
         <Tooltip title="View">
@@ -240,6 +220,8 @@ const EnhancedTableToolbar = (props) => {
       )}
         </>
       }
+=======
+>>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
     </Toolbar>
   );
 };
@@ -254,8 +236,13 @@ export default function EnhancedTable(props) {
   const {companyList, TabIndex} = props
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
+<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
+=======
+  const [open, setOpen] = React.useState(false);
+  const [ modalRowData, setModalRowData] = React.useState({})
+
+>>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
   let rowsPerPage = 6
 
   const handleRequestSort = (event, property) => {
@@ -264,6 +251,7 @@ export default function EnhancedTable(props) {
     setOrderBy(property);
   };
 
+<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = companyList.map((n) => n._id);
@@ -291,12 +279,24 @@ export default function EnhancedTable(props) {
     setSelected(newSelected);
   };
 
+=======
+>>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -305,7 +305,11 @@ export default function EnhancedTable(props) {
   return (
     <Box>
       <Paper >
+<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
         <EnhancedTableToolbar numSelected={selected.length} value={TabIndex} companyList={companyList} selected={selected}/>
+=======
+        <EnhancedTableToolbar value={TabIndex} companyList={companyList}/>
+>>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -313,12 +317,9 @@ export default function EnhancedTable(props) {
             size={'medium'}
           >
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={companyList.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -326,41 +327,54 @@ export default function EnhancedTable(props) {
               {stableSort(companyList, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
+<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
                   const isItemSelected = isSelected(row._id);
+=======
+>>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
+<<<<<<< HEAD:client/src/pages/newPages/adminSection/components/InActiveList.js
                       onClick={(event) => handleClick(event, row._id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={companyList._id}
                       selected={isItemSelected}
+=======
+                      tabIndex={-1}
+                      key={companyList._id}
+>>>>>>> origin/mongoDb-setup:client/src/pages/newPages/adminSection/pages/CompanyDetails/components/InActiveList.js
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
+                        align="left"
                       >
                         {row.CompanyName}
                       </TableCell>
-                      <TableCell align="right">{row.CompanyNumber}</TableCell>
-                      <TableCell align="right">{row.Contact}</TableCell>
-                      <TableCell align="right">{row.Email}</TableCell>
-                      <TableCell align="right">{row.Location}</TableCell>
-                      <TableCell align="right">{row.Status}</TableCell>
+                      <TableCell align="left">{row.CompanyNumber}</TableCell>
+                      <TableCell align="left">{row.Contact}</TableCell>
+                      <TableCell align="left">{row.Email}</TableCell>
+                      <TableCell align="left">{row.Location}</TableCell>
+                      <TableCell align="left">{row.Status}</TableCell>
+                      <TableCell align="left">
+                        <Tooltip title="View">
+                          <IconButton 
+                            size='small'
+                            onClick={(e)=> {
+                              setOpen(true)
+                              setModalRowData(row)
+                            }}
+                          >
+                            <BsEye/>
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -384,6 +398,19 @@ export default function EnhancedTable(props) {
           onPageChange={handleChangePage}
         />
       </Paper>
+      
+    <div>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <AcceptModal data={modalRowData} setOpen={setOpen}/>
+        </Box>
+      </Modal>
+    </div>
     </Box>
   );
 }
