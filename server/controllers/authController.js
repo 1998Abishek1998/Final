@@ -8,7 +8,6 @@ const CompanyRegistered = require("../models/CompanyRegistered");
 const register = async (req, res) => {
  
   const { name, location, email, password,username, companyId, role } = req.body;
-  console.log({ name, location, email, password,username, companyId, role } )
   if(!name || !username || !location || !email || !password || !companyId){
     throw new BAD_REQUESTError("please provide all the values");
   }
@@ -19,6 +18,7 @@ const register = async (req, res) => {
   }
 
   if(email && companyId) {    
+    console.log(email,companyId)
     const emailVerified = await CompanyRegistered.findById(companyId)
     
     if(!emailVerified && !emailVerified.IsActive){
@@ -33,18 +33,18 @@ const register = async (req, res) => {
     const src = `/uploads/${profilePath.name}`;
     const profilePicture = src || "hello";
     
-    const storage = multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null,'../uploads')
-      },
-      filename: (req, file, cb) =>{
-        cb(null, Date.now() + path.extname(file.originalname))
-      }
-    })
+    // const storage = multer.diskStorage({
+    //   destination: (req, file, cb) => {
+    //     cb(null,'../uploads')
+    //   },
+    //   filename: (req, file, cb) =>{
+    //     cb(null, Date.now() + path.extname(file.originalname))
+    //   }
+    // })
     
-    const upload = multer({ storage: storage})
+    // const upload = multer({ storage: storage})
     
-    upload.single('image')
+    // upload.single('image')
     
     const user = await User.create({
       name,
@@ -53,7 +53,8 @@ const register = async (req, res) => {
       profilePicture,
       email,
       password,
-      role
+      role,
+      companyId
     });  
 
     const token = user.createJWT();
@@ -64,6 +65,7 @@ const register = async (req, res) => {
         profilePicture: user.profilePicture,
         name: user.name,
         username:user.username,
+        companyId: user.companyId
       },
       token,
       location: user.location,
@@ -76,7 +78,8 @@ const register = async (req, res) => {
       location,
       email,
       password,
-      role
+      role,
+      companyId
     });  
 
     const token = user.createJWT();
@@ -86,6 +89,7 @@ const register = async (req, res) => {
         location: user.location,
         name: user.name,
         username:user.username,
+        companyId: user.companyId
       },
       token,
       location: user.location,
@@ -96,7 +100,6 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body)
 
   if (!email || !password) {
     throw new BAD_REQUESTError("Please provide all values");
@@ -113,7 +116,6 @@ const login = async (req, res) => {
       message: 'Invalid Credentials'
      });
   }
-  console.log(user);
   const isPasswordCorrect = await user.comparePassword(password);
 
   if (!isPasswordCorrect) {

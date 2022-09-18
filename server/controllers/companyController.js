@@ -1,5 +1,6 @@
 const CompanyRegistered = require("../models/CompanyRegistered.js");
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const User = require("../models/User.js");
 
 const companyAdd = async(req,res) =>{
   try {
@@ -182,10 +183,72 @@ const companyReject = async(req,res) =>{
     }
 }
 
+const addCompanyEmployee = async(req, res) => {
+  try {
+    const { name, location, email, password,username, companyId} = req.body;
+    if(!name || !username || !location || !email || !password || !companyId){
+      return res.status(400).json({
+        status: 'failed',
+        message: 'please provide all the values'
+      })
+    }
+
+
+    const userAlreadyExists = await User.findOne({ email });
+    if (userAlreadyExists) {
+      return res.status(400).json({
+        status: 'failed',
+        message: 'User Already exists'
+      })  
+    }
+    console.log({ name, location, email, password,username, companyId},'3')
+    if(email && companyId){
+      const emailVerified = await CompanyRegistered.findById(companyId)
+    
+      if(!emailVerified && !emailVerified.IsActive){
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'The company is not registerd or verified yet'
+        })
+      }
+
+
+    const user = await User.create({
+      name,
+      username,
+      location,
+      email,
+      password,
+      companyId
+    });  
+
+    const token = user.createJWT();
+    res.status(StatusCodes.CREATED).json({
+      user: {
+        email: user.email,
+        location: user.location,
+        name: user.name,
+        username:user.username,
+        companyId
+      },
+      token,
+      location: user.location,
+    });
+    }
+
+  } catch (error) {
+    res.status(500).json({
+      status: 'failed',
+      message: 'Something went wrong in our application. Please try again later!!'
+    })
+  }
+}
+
 module.exports = {
   companyAdd,
   getAllCompany,
   companyApprove,
   companyReject,
-  companyActive
+  companyActive,
+  addCompanyEmployee
 };
