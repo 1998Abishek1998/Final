@@ -40,7 +40,10 @@ import {
   COMPANY_APPROVE_REQUEST,
   COMPANY_APPROVE_SUCCESS,
   COMPANY_REJECT_REQUEST,
-  COMPANY_REJECT_SUCCESS
+  COMPANY_REJECT_SUCCESS,
+  CREATE_COMPANY_EMPLOYEE_SUCCESS,
+  CREATE_COMPANY_EMPLOYEE_REQUEST,
+  CREATE_COMPANY_EMPLOYEE_ERROR
 
 } from "./action";
 
@@ -70,8 +73,7 @@ const initialState = {
   profilePost: [],
   buttontype: false,
   searchList: [],
-  followers: [],
-  followings: [],
+  friends: [],
   commentsList: [],
   company: []
 };
@@ -459,6 +461,50 @@ const AppProvider = ({ children }) => {
     }
   }
 
+  const setupEmployee = async ({ currentUser, id, alertTextEmployee }) => {
+    dispatch({ type: CREATE_COMPANY_EMPLOYEE_REQUEST });
+
+    const { name, location, email, password, image, username, companyId, role } =
+      currentUser;
+
+    let formData = new FormData();
+
+    formData.append("name", name);
+    formData.append("username", username);
+    formData.append("location", location);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("profilePicture", image);
+    formData.append("companyId", companyId);
+    formData.append("role", role);
+
+    try {
+      const { data } = await authFetch.post(`/company/addCompanyUser/${id}`, formData);
+
+      const { user, token, location } = data;
+
+      dispatch({
+        type: CREATE_COMPANY_EMPLOYEE_SUCCESS,
+        payload: {
+          user,
+          token,
+          location,
+          alertTextEmployee,
+        },
+      });
+
+    } catch (error) {
+      //local storage later
+
+      dispatch({
+        type: CREATE_COMPANY_EMPLOYEE_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+
+    clearAlert();
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -469,7 +515,7 @@ const AppProvider = ({ children }) => {
         rejectCompany,
         handleChange,
         clearValues,
-
+        setupEmployee,
         createPost,
         getallPosts,
 
@@ -493,7 +539,6 @@ const AppProvider = ({ children }) => {
         commentDelete,
         addCompany,
         getAllCompany,
-        approveCompany
       }}
     >
       {children}

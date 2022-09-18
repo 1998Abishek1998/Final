@@ -13,19 +13,15 @@ import {
   PostCard,
   Followbtn,
   UserForm,
-  FollowAction,
-  RemoveFollwerbtn,
 } from "../components";
 
 const Profile = () => {
   const {
-    user,
     userProfile,
     profileUser,
     profilePost,
     isLoading,
-    followers,
-    followings,
+    friends
   } = useAppContext();
   const { id: userId } = useParams();
 
@@ -142,7 +138,7 @@ const Profile = () => {
           </div>
 
           <div className={tab === 2 ? "" : "display-none"}>
-            {followers.map((item) => {
+            {friends.map((item) => {
               return (
                 <div className="following-lists ">
                     <img
@@ -157,44 +153,12 @@ const Profile = () => {
                       <div>{item.name}</div>
                     </div>
                     </Link>
-                    <div
-                      className={
-                        user._id === profileUser._id ? "" : "visibility-hidden"
-                      }
-                    >
-                      <RemoveFollwerbtn followerId={item._id} />
-                    </div>
                   </div>
               );
             })}
           </div>
 
           <div className={tab === 3 ? "" : "display-none"}>
-            {followings.map((item) => {
-              return (
-                <div className="following-lists ">
-                    <img
-                      className="profile-photo"
-                      src={item.profilePicture}
-                      alt=""
-                    />
-                    <Link to={`/profile/${item._id}`}>
-
-                    <div className="following-info">
-                      <span>{item.username}</span>
-                      <div>{item.name}</div>
-                    </div>
-                    </Link>
-                    <div
-                      className={
-                        user._id === profileUser._id ? "" : "visibility-hidden"
-                      }
-                    >
-                      <FollowAction followinguser={item._id} />
-                    </div>
-                  </div>
-              );
-            })}
           </div>
         </div>
       </div>

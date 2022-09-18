@@ -9,6 +9,7 @@ import { Landing, Profile, ProtectedRoute } from './pages';
 import CompanyRegister from './pages/newPages/CompanyRegister';
 import Home from './pages/newPages/adminSection/Home';
 import RegisterOwner from './pages/newPages/adminSection/pages/CompanyRegistration/RegisterOwner';
+import CreateEmployee from './pages/newPages/CreateEmployee';
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
                   }
                 >
                   <Route index element={<PostPage />} />
+                  <Route path="/user/create/employee/:Id" element={<CreateEmployee/>} />
                   <Route path="postdetail/:id" element={<Postedit />} />
                 </Route>
                 <Route

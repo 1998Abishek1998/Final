@@ -3,6 +3,7 @@ import links from "../utils/links";
 import Wrapper from "../assets/wrappers/Navlinks";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../context/appContext";
+import { BiUser } from "react-icons/bi";
 
 const NavLinks = ({ toggleSidebar }) => {
   const { user } = useAppContext();
@@ -37,6 +38,21 @@ const NavLinks = ({ toggleSidebar }) => {
             </NavLink>
           );
         })}
+        {
+          user.role === 2 ? <>
+            <NavLink
+              to={`/user/create/employee/${user._id}`}
+              key={'emp-123'}
+              onClick={toggleSidebar}
+              className={({ isActive }) =>
+                isActive ? "menu-item active" : "menu-item"
+              }
+            >
+              <span className="icon"><BiUser/></span>
+              <h3>Create Employee</h3>
+            </NavLink>
+          </> : <></>
+        }
       </div>
     </Wrapper>
   );

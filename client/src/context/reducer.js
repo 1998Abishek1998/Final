@@ -41,7 +41,10 @@ import {
   COMPANY_APPROVE_REQUEST,
   COMPANY_APPROVE_SUCCESS,
   COMPANY_REJECT_REQUEST,
-  COMPANY_REJECT_SUCCESS
+  COMPANY_REJECT_SUCCESS,
+  CREATE_COMPANY_EMPLOYEE_REQUEST,
+  CREATE_COMPANY_EMPLOYEE_SUCCESS,
+  CREATE_COMPANY_EMPLOYEE_ERROR
 } from "./action";
 
 import { initialState } from "./appContext";
@@ -332,7 +335,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      approvedCompany: action.payload.company
+      approvedCompany: action.payload.approvedCompany
     };
   }
 
@@ -345,10 +348,33 @@ const reducer = (state, action) => {
       ...state,
       isLoading: false,
       alertType: "success",
-      rejectedCompany: action.payload.company
+      rejectedCompany: action.payload.rejectedCompany
     };
   }
 
+  if (action.type === CREATE_COMPANY_EMPLOYEE_REQUEST) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === CREATE_COMPANY_EMPLOYEE_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "success",
+      alertTextEmployee: action.payload.alertText,
+    };
+  }
+
+  if (action.type === CREATE_COMPANY_EMPLOYEE_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertTextEmployee: action.payload.msg,
+    };
+  }
+  
   throw new Error(`no such action: ${action.type}`);
 };
 
