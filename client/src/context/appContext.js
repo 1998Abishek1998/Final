@@ -43,7 +43,9 @@ import {
   COMPANY_REJECT_SUCCESS,
   CREATE_COMPANY_EMPLOYEE_SUCCESS,
   CREATE_COMPANY_EMPLOYEE_REQUEST,
-  CREATE_COMPANY_EMPLOYEE_ERROR
+  CREATE_COMPANY_EMPLOYEE_ERROR,
+  GET_COMPANY_REQUEST,
+  GET_COMPANY_SUCCESS
 
 } from "./action";
 
@@ -443,6 +445,17 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const getSingleCompany = async (Id) => {
+    dispatch({ type: GET_COMPANY_REQUEST });
+    try {
+      const response = await authFetch(`/company/getsingleCompany/${Id}`);
+      dispatch({ type: GET_COMPANY_SUCCESS, payload: { singleCompany: response.data.data } });
+    } catch (error) {
+      console.log(error.response);
+    }
+    clearAlert();
+  };
+
   const approveCompany = async(Id)=>{
     dispatch({type: COMPANY_APPROVE_REQUEST})
     try {
@@ -530,7 +543,7 @@ const AppProvider = ({ children }) => {
 
         postUpdate,
         deletePost,
-
+        getSingleCompany,
         userProfile,
         followUser,
         unfollowUser,

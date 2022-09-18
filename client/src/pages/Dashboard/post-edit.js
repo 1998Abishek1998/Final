@@ -1,4 +1,4 @@
-import { ImagePreview, Alert, PostCard } from "../../components";
+import { ImagePreview, Alert } from "../../components";
 import { useAppContext } from "../../context/appContext";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -17,7 +17,6 @@ const Postedit = () => {
       <Alert />
 
       <ImagePreview postInfo={postInfo} />
-      {/* <PostCard item={postInfo} /> */}
     </div>
   );
 };
