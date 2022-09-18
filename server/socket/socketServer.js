@@ -14,7 +14,7 @@ const { setServerSocketInstance, getOnlineUsers } = require("./connectedUsers");
 const createSocketServer = (server) => {
     const io = socket(server, {
         cors: {
-            origin: ["http://localhost:3000", "https://talkhouse-tv.netlify.app"],
+            origin: ["http://localhost:3000"],
             methods: ["GET", "POST"],
         },
     });
@@ -39,7 +39,6 @@ const createSocketServer = (server) => {
         socket.on("direct-chat-history", (data) => {
             directChatHistoryHandler(socket, data.receiverUserId);
         });
-
 
         socket.on("notify-typing", (data) => {
             notifyTypingHandler(socket, io, data);

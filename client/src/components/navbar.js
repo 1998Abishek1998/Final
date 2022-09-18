@@ -10,7 +10,7 @@ const Navbar = () => {
   const [showLogout, setShowLogout] = useState(false);
   const [openPostModal, setOpenPostModal] = useState(false)
   
-  const { logoutUser } = useAppContext();
+  const { logoutUser, singleCompany } = useAppContext();
   
   const handleClose = () => setOpenPostModal(false);
 
@@ -21,7 +21,7 @@ const Navbar = () => {
         <div className="container">
           <h2 className="log">
             <Link to='/user'>
-              WinkleMedia
+              { singleCompany ? `${singleCompany.CompanyName}` : ' WinkleMedia'}
             </Link>
           </h2>
           <Searchbar/>

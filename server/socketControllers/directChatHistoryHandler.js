@@ -1,8 +1,7 @@
 const Conversation = require("../models/Conversation");
 const { getServerSocketInstance } = require("../socket/connectedUsers");
 const { updateChatHistory } = require("./notifyConnectedSockets");
-
-
+  
 const directChatHistoryHandler = async (socket, receiverUserId) => {
 
     try {

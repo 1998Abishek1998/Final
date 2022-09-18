@@ -22,10 +22,34 @@ const Input = styled("input")({
     padding: "0 10px",
 });
 
-const NewMessageInput = () => {
+interface NewMessageInputProps {
+    setErrorMessage: Function
+}
+const NewMessageInput = (props: NewMessageInputProps) => {
+    const { setErrorMessage } = props
     const [message, setMessage] = useState("");
     const [focused, setFocused] = useState(false);
 
+    const negativeWords = [
+        'muji',
+        'machikni',
+        'randi',
+        'shit',
+        'bullshit',
+        'fuck',
+        'fucking',
+        'fucker',
+        'fuckers',
+        'geda',
+        'lado',
+        'puti',
+        'khatey',
+        'jathi',
+        'jatho',
+        'sale',
+        'rando'
+      ]
+      
     const onFocus = () => setFocused(true);
     const onBlur = () => setFocused(false);
 
@@ -34,12 +58,18 @@ const NewMessageInput = () => {
     const handleSendMessage = (e: React.KeyboardEvent<HTMLInputElement>) => {
         
         if (e.key === "Enter") {
-            sendDirectMessage({
-                message,
-                receiverUserId: chatDetails?.userId!,
-            });
-
-            setMessage("");
+            var words = message.split(" ");
+            const isnegativeLoc = negativeWords.filter(element => words.includes(element));
+            if(isnegativeLoc.length > 0){
+                setErrorMessage(true)
+            }else{
+                setErrorMessage(false)
+                sendDirectMessage({
+                    message,
+                    receiverUserId: chatDetails?.userId!,
+                });
+                setMessage("");
+            }
         }
     };
 
