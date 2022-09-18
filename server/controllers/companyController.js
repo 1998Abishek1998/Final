@@ -59,6 +59,22 @@ const getAllCompany = async(req,res) =>{
   }
 }
 
+const getSingleCompany = async(req,res) =>{
+  try {
+    const companyFinder = await CompanyRegistered.findById(req.params.Id)
+     res.status(200).json({
+        status: 'success',
+        data : companyFinder
+    })
+    
+  } catch (error) {
+    res.status(500).json({
+      status: 'Failed',
+      message: 'Could not find company list'
+    })
+  }
+}
+
 const companyApprove = async(req,res) =>{
     try {
        const company = await CompanyRegistered.findOneAndUpdate(
@@ -326,5 +342,6 @@ module.exports = {
   companyApprove,
   companyReject,
   companyActive,
-  addCompanyEmployee
+  addCompanyEmployee,
+  getSingleCompany
 };

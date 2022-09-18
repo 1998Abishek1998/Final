@@ -18,7 +18,6 @@ const register = async (req, res) => {
   }
 
   if(email && companyId) {    
-    console.log(email,companyId)
     const emailVerified = await CompanyRegistered.findById(companyId)
     
     if(!emailVerified && !emailVerified.IsActive){
@@ -27,6 +26,14 @@ const register = async (req, res) => {
         message: 'The company is not registerd or verified yet'
       })
     }
+
+    await CompanyRegistered.findOneAndUpdate(
+      { _id: companyId },
+      {
+        $set: { Status: 'active' },
+      },
+      { new: true }
+    )
 
   if (req.files) {
     const profilePath = req.files.profilePicture;

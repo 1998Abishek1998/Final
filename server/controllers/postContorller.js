@@ -123,7 +123,7 @@ const UpdatePost = async (req, res) => {
     throw new NotFoundError(`No post with id ${postId}`);
   }
 
-  if ((req.files === null) & (networkpath.length > 0)) {
+  if ((req.files === null) && (networkpath.length > 0)) {
     console.log("new");
     for (let i = 0; i < networkpath.length; i++) {
       newlist.push(networkpath[i]);
