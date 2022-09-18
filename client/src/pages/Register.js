@@ -34,8 +34,12 @@ const Register = () => {
   const {setupUser,isLoading,showAlert,user} = useAppContext()
   const navigate = useNavigate();
   const dispatch = useDispatch()
-  
   const [values,setValues] = useState(initialState)
+
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[])
+
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -167,18 +171,11 @@ const Register = () => {
         <FormRow type='password' name="password" value={values.password} handleChange ={handleChange}/>
 
         <button type='submit' className='btn btn-block btn-getstarted' onClick={onSubmit} >Submit</button>
-        <p>
-            {values.isMember?'Not a member yet ?':'Already a member ? '}
-            <button type='button' onClick= {toggleMember} className="member-btn" disabled={isLoading}> {values.isMember ? ' Register' :' Log in'}</button>
-
-        </p>
-
      </form>
        <div className='sidebg'>
-         <video className="bg-video" autoPlay muted>
-            {/* <source type="video/mp4" src={backgroundbg} />
-           */}
-           </video>
+        <div className="bg-video">
+          <image src='' alt="picture"/>
+        </div>
           <div className="bglinear"></div>
        </div>
 
