@@ -18,7 +18,7 @@ const togglestate = {
 const AddPostForm = () => {
   const [value, setValues] = useState(togglestate);
   const [selectedImages, setSelectedImages] = useState([]);
-  const { createPost } = useAppContext();
+  const { createPost, user } = useAppContext();
 
   const toggleMember = () => {
     setValues({ ...value, location: !value.location });
@@ -46,8 +46,8 @@ const AddPostForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const { images, userlocation, description } = value;
-
-    const userpost = { images, userlocation, description };
+    const companyId = user.companyId
+    const userpost = { images, userlocation, description, companyId };
    
 
     createPost({ userpost });

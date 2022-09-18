@@ -39,6 +39,10 @@ const Dashboard = () => {
             })
             // connect to socket server
             connectWithSocketServer(tempuserDetails as UserDetails);
+        }else{
+            navigate({
+                pathname:'/',
+            })
         }
     }, [user,token, navigate]);
 

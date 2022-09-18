@@ -207,11 +207,13 @@ const AppProvider = ({ children }) => {
   const createPost = async ({ userpost }) => {
     dispatch({ type: CREATE_POST_BEGIN });
     try {
-      const { userlocation, description, images } = userpost;
+      const { userlocation, description, images, companyId } = userpost;
       let formData = new FormData();
 
       formData.append("location", userlocation);
       formData.append("description", description);
+      formData.append('companyId',companyId)
+      
       for (let i = 0; i < images.length; i++) {
         formData.append("images", images[i]);
       }

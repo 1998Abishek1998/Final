@@ -456,3 +456,32 @@ code {
     opacity: 1;
   }
 }
+
+.formRow{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 70%;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.formLabel{
+  padding-left: 10px;
+  margin-right: 10%;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.formInput{
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgb(255, 0, 255);
+  width: 300px;
+}
+
+.fileInput{
+  height: 40px;
+  width: 300px;
+  font-size: 18px;
+}

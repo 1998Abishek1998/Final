@@ -13,9 +13,15 @@ const CompanyRegistered = require("../models/CompanyRegistered.js");
 //const __dirname = path.dirname(__filename);
 
 const postUpload = async (req, res, next) => {
-  const { location, description } = req.body;
+  const { location, description, companyId } = req.body;
   const userId = req.user.userId;
   const imagelst = [];
+  
+  if(!companyId) res.status(400).json({
+    status: 'failed',
+    message:'company not found'
+  })
+  
   if(!description){
     return res.status(400).json({ 
       status:'400',
@@ -43,6 +49,7 @@ const postUpload = async (req, res, next) => {
     location: location,
     description,
     userid: userId,
+    companyId: companyId
   });
   if (!post) {
     console.log("throw error");

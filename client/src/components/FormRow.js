@@ -1,8 +1,8 @@
-const FormRow = ({type,name,value,handleChange,LabelText}) =>{
+const FormRow = ({type,name,value,handleChange,LabelText, noClass, classFile}) =>{
     return (
-        <div className="form-row">
-            <label htmlFor={name} className="formlabel">{name}</label>
-            <input type={type} value={value} name={name} onChange={handleChange}  className="form-input" />
+        <div className={`${noClass ? 'formRow':'form-row'}`}>
+            <label htmlFor={name} className={`${noClass ? 'formLabel': "formlabel"}`}>{name}</label>
+            <input type={type} value={value} name={name} onChange={handleChange}  className={`${noClass ?  classFile ? 'fileInput' :'formInput': "form-input"}`} />
         </div>
     )
 }
