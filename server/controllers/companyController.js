@@ -71,12 +71,12 @@ const companyApprove = async(req,res) =>{
           { new: true }
         )
 
-          if(company){
-            const {CompanyName, Email} = company
+      if(company){
+          const {CompanyName, Email} = company
 
         const output = `
             <h5>Welcome to Winkle Media ${CompanyName}</h5>
-            <span>You have sucessfully registered in our system. Click the route for further process <a href='http://localhost:3000/owner/${req.params.Id}'>Register Owner</a></span>
+            <span>You have sucessfully registered in our system. Click the route for further process <a href='http://localhost:3000/owner/register/${req.params.Id}'>Register Owner</a></span>
         `
         const transporter = nodemailer.createTransport({
             service:'gmail',
@@ -102,12 +102,11 @@ const companyApprove = async(req,res) =>{
           });
 
           console.log("Message sent: %s", info.messageId);
-
-        return res.status(200).json({
-          status: 'success',
-          data: company
-        })
       }
+      return res.status(200).json({
+        status: 'success',
+        data: company
+      })
     } catch (error) {
         return res.status(500).json({
           status: 'Failed',
@@ -169,12 +168,43 @@ const companyReject = async(req,res) =>{
             },
             { new: true }
         )
+        if(company){
+          const {CompanyName, Email} = company
 
-        return res.status(200).json({
-          status: 'success',
-          data: company
-        })
+      const output = `
+          <h5>Sorry your company was rejected from Winkle Media ${CompanyName}</h5>
+          <span>Thank you for applying</span>
+      `
+      const transporter = nodemailer.createTransport({
+          service:'gmail',
+          auth: {
+              user: process.env.EMAIL_HOST_USER,
+              pass: process.env.EMAIL_HOST_PASSWORD
+          }
+      });
+      
+        // send mail with defined transport object
+        let info = transporter.sendMail({
+          from: `WinkleMedia ${process.env.EMAIL_HOST_USER}`, // sender address
+          to: `${Email}`, // list of receivers
+          subject: "Node Test ✔", // Subject line
+          text: '', // plain text body
+          html: output, // html body
+        },function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
 
+        console.log("Message sent: %s", info.messageId);
+
+      return res.status(200).json({
+        status: 'success',
+        data: company
+      })
+    }
     } catch (error) {
         return res.status(500).json({
           status: 'Failed',
@@ -201,7 +231,7 @@ const addCompanyEmployee = async(req, res) => {
         message: 'User Already exists'
       })  
     }
-    console.log({ name, location, email, password,username, companyId},'3')
+
     if(email && companyId){
       const emailVerified = await CompanyRegistered.findById(companyId)
     
@@ -212,7 +242,6 @@ const addCompanyEmployee = async(req, res) => {
         })
       }
 
-
     const user = await User.create({
       name,
       username,
@@ -220,18 +249,33 @@ const addCompanyEmployee = async(req, res) => {
       email,
       password,
       companyId
-    });  
+    });
+    console.log(user,'user')
+    //sender
+    await User.findOneAndUpdate(
+      { _id: req.params.Id },
+      {
+        $push: { friends: user._id },
+      },
+      { new: true }
+    );
+    await User.findOneAndUpdate(
+      { _id: user._id },
+      {
+        $push: { friends: req.params.Id },
+      },
+      { new: true }
+    )
 
-    const token = user.createJWT();
-    res.status(StatusCodes.CREATED).json({
+    res.status(200).json({
       user: {
         email: user.email,
         location: user.location,
         name: user.name,
         username:user.username,
-        companyId
+        companyId: user.companyId,
+        friends: user.friends
       },
-      token,
       location: user.location,
     });
     }

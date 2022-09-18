@@ -65,7 +65,9 @@ const register = async (req, res) => {
         profilePicture: user.profilePicture,
         name: user.name,
         username:user.username,
-        companyId: user.companyId
+        companyId: user.companyId,
+        Id: user._id,
+        
       },
       token,
       location: user.location,
