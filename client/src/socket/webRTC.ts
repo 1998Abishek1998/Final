@@ -6,9 +6,9 @@ import { store } from "../store";
 export const getLocalStreamPreview = (audioOnly: boolean, callback?: () => void) => {
     
     const constraints = { audio: true, video: audioOnly ? false : true };
-
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-
+    console.log(navigator)
+     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+        console.log(stream)
         store.dispatch(setLocalStream(stream) as any);
 
         if (callback) {

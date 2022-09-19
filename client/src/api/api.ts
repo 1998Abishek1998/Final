@@ -6,7 +6,7 @@ import {
     inviteFriendArgs,
 } from "./types";
 
-const BASE_URL = "http://localhost:5000"; 
+const BASE_URL = "http://192.168.101.14:8080"; 
 // const BASE_URL = "https://saliks-discord.herokuapp.com/";
 
 const api = axios.create({

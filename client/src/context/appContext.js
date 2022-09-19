@@ -86,7 +86,7 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`
   const authFetch = axios.create({
-    baseURL: "http://localhost:5000/api/v1",
+    baseURL: "http://192.168.101.14:8080/api/v1",
     headers: {
       Authorization: `Bearer ${state.token}`,
     },

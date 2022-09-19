@@ -92,7 +92,7 @@ const companyApprove = async(req,res) =>{
 
         const output = `
             <h5>Welcome to Winkle Media ${CompanyName}</h5>
-            <span>You have sucessfully registered in our system. Click the route for further process <a href='http://localhost:3000/owner/register/${req.params.Id}'>Register Owner</a></span>
+            <span>You have sucessfully registered in our system. Click the route for further process <a href='${req.headers.referer}/owner/register/${req.params.Id}'>Register Owner</a></span>
         `
         const transporter = nodemailer.createTransport({
             service:'gmail',
@@ -116,8 +116,6 @@ const companyApprove = async(req,res) =>{
               console.log('Email sent: ' + info.response);
             }
           });
-
-          console.log("Message sent: %s", info.messageId);
       }
       return res.status(200).json({
         status: 'success',
@@ -284,7 +282,7 @@ const addCompanyEmployee = async(req, res) => {
 
     const output = `
       <h5>Hello ${username} your account has been created at ${emailVerified.CompanyName}.</h5>
-      <span>Click <a href='http://localhost:3000/'>here</a> to check out the application.</span>
+      <span>Click <a href='${req.headers.referer}/'> here</a> to check out the application.</span>
     `
     const transporter = nodemailer.createTransport({
     service:'gmail',
