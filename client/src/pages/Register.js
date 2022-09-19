@@ -8,7 +8,7 @@ import {useDispatch} from 'react-redux';
 
 //import backgroundbg from '../assets/videos/handtouch.mp4'
 import { Link, useNavigate } from 'react-router-dom'
-import { loginUser } from '../actions/authActions';
+import { autoLogin, loginUser } from '../actions/authActions';
 
 const initialState ={
  
@@ -42,6 +42,7 @@ const Register = () => {
 
   useEffect(() => {
     if (user) {
+      dispatch(autoLogin)
       setTimeout(() => {
         if(user.role === 1) navigate('/admin-pannel')
         else navigate("/user");

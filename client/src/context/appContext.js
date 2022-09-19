@@ -82,11 +82,13 @@ const initialState = {
 
 const AppContext = React.createContext();
 
+const BASE_URL = "http://192.168.101.14:8080/api/v1"
+
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`
   const authFetch = axios.create({
-    baseURL: "http://192.168.101.14:8080/api/v1",
+    baseURL: BASE_URL,
     headers: {
       Authorization: `Bearer ${state.token}`,
     },
@@ -97,34 +99,34 @@ const AppProvider = ({ children }) => {
   });
 
   // response interceptor
-  authFetch.interceptors.request.use(
-    (config) => {
-      // do something before request is sent
-      config.headers.common["Authorization"] = `Bearer ${state.token}`;
-      return config;
-    },
-    (error) => {
-      // do something with the request error
-      return Promise.reject(error);
-    }
-  );
-  // response interceptor
-  authFetch.interceptors.response.use(
-    (response) => {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-      return response;
-    },
-    (error) => {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
+  // authFetch.interceptors.request.use(
+  //   (config) => {
+  //     // do something before request is sent
+  //     config.headers.common["Authorization"] = `Bearer ${state.token}`;
+  //     return config;
+  //   },
+  //   (error) => {
+  //     // do something with the request error
+  //     return Promise.reject(error);
+  //   }
+  // );
+  // // response interceptor
+  // authFetch.interceptors.response.use(
+  //   (response) => {
+  //     // Any status code that lie within the range of 2xx cause this function to trigger
+  //     // Do something with response data
+  //     return response;
+  //   },
+  //   (error) => {
+  //     // Any status codes that falls outside the range of 2xx cause this function to trigger
+  //     // Do something with response error
 
-      if (error.response.status === 401) {
-        console.log("hello");
-      }
-      return Promise.reject(error);
-    }
-  );
+  //     if (error.response.status === 401) {
+  //       console.log("hello");
+  //     }
+  //     return Promise.reject(error);
+  //   }
+  // );
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
     clearAlert();
@@ -386,7 +388,7 @@ const AppProvider = ({ children }) => {
   const allComments = async ({ postId }) => {
     dispatch({ type: GET_COMMENTS_BEGIN });
     try {
-      const response = await authFetch.get(`/comment/get/${postId}`);
+      const response = await authFetch(`/comment/get/${postId}`);
       dispatch({
         type: GET_COMMENTS_SUCCESS,
         payload: { comments: response.data.comment },

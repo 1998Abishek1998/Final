@@ -1,7 +1,18 @@
 import { Navbar, BigSidebar, Recommendation } from "../../components";
 import Wrapper from "../../assets/wrappers/SharedLayout";
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { useAppContext } from "../../context/appContext";
 const SharedLayout = () => {
+
+  const { user, getSingleCompany} = useAppContext()
+
+  useEffect(()=>{
+    if(user){
+      getSingleCompany(user.companyId)
+    }
+  },[user])
+
   return (
     <Wrapper>
       <section>

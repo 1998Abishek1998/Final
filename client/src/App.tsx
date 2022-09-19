@@ -1,7 +1,5 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from "react-redux";
+import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { autoLogin } from './actions/authActions';
 import {Dashboard, Postedit, PostPage, SharedLayout, SharedLayoutv2} from './pages/Dashboard';
 import Register from './pages/Register';
 import AlertNotification from "./components/AlertNotification"
@@ -10,21 +8,10 @@ import CompanyRegister from './pages/newPages/CompanyRegister';
 import Home from './pages/newPages/adminSection/Home';
 import RegisterOwner from './pages/newPages/adminSection/pages/CompanyRegistration/RegisterOwner';
 import CreateEmployee from './pages/newPages/CreateEmployee';
-import { useAppContext } from './context/appContext';
 
 function App() {
-  const { user, getSingleCompany } = useAppContext()
-  const dispatch = useDispatch();
   // auto login
-  useEffect(() => {
-    dispatch(autoLogin());
-  }, [dispatch])
 
-  useEffect(()=>{
-    if(user){
-      getSingleCompany(user.companyId)
-    }
-  },[user])
   
   return (
       <>
