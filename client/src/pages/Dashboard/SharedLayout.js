@@ -15,7 +15,7 @@ const SharedLayout = () => {
           <div className="container">
             <BigSidebar />
             <Outlet />
-            <Recommendation />
+            {/* <Recommendation /> */}
           </div>
         </main>
         <div className="glassbg"></div>

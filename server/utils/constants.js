@@ -1,0 +1,19 @@
+const negativeWords = [
+    'muji',
+    'machikni',
+    'randi',
+    'shit',
+    'bullshit',
+    'fuck',
+    'fucking',
+    'fucker',
+    'fuckers',
+    'geda',
+    'lado',
+    'puti',
+    'khatey',
+    'jathi',
+    'jatho',
+    'sale',
+    'rando'
+]

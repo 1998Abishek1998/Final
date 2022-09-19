@@ -43,7 +43,9 @@ import {
   COMPANY_REJECT_SUCCESS,
   CREATE_COMPANY_EMPLOYEE_SUCCESS,
   CREATE_COMPANY_EMPLOYEE_REQUEST,
-  CREATE_COMPANY_EMPLOYEE_ERROR
+  CREATE_COMPANY_EMPLOYEE_ERROR,
+  GET_COMPANY_REQUEST,
+  GET_COMPANY_SUCCESS
 
 } from "./action";
 
@@ -84,7 +86,7 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`
   const authFetch = axios.create({
-    baseURL: "http://localhost:5000/api/v1",
+    baseURL: "http://192.168.101.14:8080/api/v1",
     headers: {
       Authorization: `Bearer ${state.token}`,
     },
@@ -207,11 +209,13 @@ const AppProvider = ({ children }) => {
   const createPost = async ({ userpost }) => {
     dispatch({ type: CREATE_POST_BEGIN });
     try {
-      const { userlocation, description, images } = userpost;
+      const { userlocation, description, images, companyId } = userpost;
       let formData = new FormData();
 
       formData.append("location", userlocation);
       formData.append("description", description);
+      formData.append('companyId',companyId)
+      
       for (let i = 0; i < images.length; i++) {
         formData.append("images", images[i]);
       }
@@ -441,6 +445,17 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const getSingleCompany = async (Id) => {
+    dispatch({ type: GET_COMPANY_REQUEST });
+    try {
+      const response = await authFetch(`/company/getsingleCompany/${Id}`);
+      dispatch({ type: GET_COMPANY_SUCCESS, payload: { singleCompany: response.data.data } });
+    } catch (error) {
+      console.log(error.response);
+    }
+    clearAlert();
+  };
+
   const approveCompany = async(Id)=>{
     dispatch({type: COMPANY_APPROVE_REQUEST})
     try {
@@ -528,7 +543,7 @@ const AppProvider = ({ children }) => {
 
         postUpdate,
         deletePost,
-
+        getSingleCompany,
         userProfile,
         followUser,
         unfollowUser,

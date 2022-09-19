@@ -4,6 +4,7 @@ import {FormRow,Alert} from '../../components'
 import { useAppContext } from '../../context/appContext'
 //import backgroundbg from '../assets/videos/handtouch.mp4'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { TextField } from '@mui/material'
 
 const initialState ={
  
@@ -19,7 +20,7 @@ const initialState ={
 }
 
 const CreateEmployee = () => {
-    const {setupEmployee,showAlert, user} = useAppContext()
+    const {setupEmployee, user} = useAppContext()
     const {Id} = useParams()
     const [values,setValues] = useState(initialState)
   
@@ -54,51 +55,40 @@ const CreateEmployee = () => {
     
   
     return (
-      <div className ='full-name'>
-         <form action="" className='form' encType="multipart/form-data; boundary=<calculated when request is sent>" >
-          {showAlert && <Alert/>}
-  
-        
-  
-         <div className="title">
-          <Link to='/'>
-            Winkle
-          </Link>
-         </div>
-        <h3 className='login-t'>{values.isMember ? ' Log in' :' Register'}</h3>
-        <p className='login-p'>Enter your credentials to {values.isMember ? 'acesss' :' create'} your account</p>
-          (<FormRow 
+      <div>
+        <form action=""  encType="multipart/form-data; boundary=<calculated when request is sent>" >
+        <h2>Enter your credentials to  create your employee's account.</h2>
+        <br/>
+        <br/>
+          <FormRow 
           type='text' 
           name="name" 
           handleChange ={handleChange}
-  
-         
-         
+          noClass={true}
           />
-          (<FormRow 
+          <FormRow 
           type='text' 
           name="username" 
           handleChange ={handleChange}
-  
-         
-         
+          noClass={true}
           />
-           <FormRow type='email' name="email" value={values.email} handleChange ={handleChange} />
+           <FormRow type='email' name="email" value={values.email} handleChange ={handleChange} noClass={true}/>
   
-          (<FormRow 
+          <FormRow 
           type='file' 
           name="profilePicture" 
-          handleChange ={FileChange}        
+          handleChange ={FileChange}
+          noClass={true}
+          classFile={true}
           />
           <FormRow 
           type='text' 
           name="location"
           value={values.location} 
            handleChange ={handleChange}
-        
-          
+           noClass={true}          
           />           
-          <FormRow type='password' name="password" value={values.password} handleChange ={handleChange}/>
+          <FormRow type='password' name="password" value={values.password} handleChange ={handleChange} noClass={true}/>
   
           <button type='submit' className='btn btn-block btn-getstarted' onClick={onSubmit} >Submit</button>  
        </form>

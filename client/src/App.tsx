@@ -10,14 +10,21 @@ import CompanyRegister from './pages/newPages/CompanyRegister';
 import Home from './pages/newPages/adminSection/Home';
 import RegisterOwner from './pages/newPages/adminSection/pages/CompanyRegistration/RegisterOwner';
 import CreateEmployee from './pages/newPages/CreateEmployee';
+import { useAppContext } from './context/appContext';
 
 function App() {
-
+  const { user, getSingleCompany } = useAppContext()
   const dispatch = useDispatch();
   // auto login
   useEffect(() => {
     dispatch(autoLogin());
   }, [dispatch])
+
+  useEffect(()=>{
+    if(user){
+      getSingleCompany(user.companyId)
+    }
+  },[user])
   
   return (
       <>

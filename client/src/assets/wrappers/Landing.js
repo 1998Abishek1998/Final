@@ -35,10 +35,9 @@ const wrapper = styled.aside`
     height: 100%;
     background-image: linear-gradient(
       135deg,
-      rgba(1, 3, 5, 0.2) 0%,
-      rgb(9, 3, 15, 0.2) 100%
+      rgba(10, 123,15, 0.2) 0%,
+      rgb(912, 22, 215, 0.2) 100%
     );
-    animation: fadeOut 5s cubic-bezier(0, 0.33, 0.07, 1.03) 1.9s forwards;
   }
   nav {
     position: absolute;
@@ -62,7 +61,7 @@ const wrapper = styled.aside`
     font-weight: bold;
 
     li>a{
-      color: white;
+      color:  #ab89c7;
       text-decoration: none;
     }
   }
@@ -82,7 +81,7 @@ const wrapper = styled.aside`
     text-align: center;
     display: flex;
     box-shadow: 0px 0px 21px rgb(255 255 255 / 26%);
-
+    color:  #ab89c7;
     justify-content: center;
     align-items: center;
     font-weight: 900;
@@ -97,7 +96,7 @@ const wrapper = styled.aside`
     opacity: 0;
 
     text-align: center;
-    color: #ffffff;
+    color:  #ab89c7;
     /* transform: translateY(-50px); */
     font-family: "MADE Soulmaze Outline Regular";
     font-size: min(10vw, 85px);
@@ -105,7 +104,7 @@ const wrapper = styled.aside`
     line-height: min(10vw, 81px);
     text-shadow: 0px 0px 21px rgb(255 255 255 / 65%);
     z-index: 1;
-    animation: fadeIn 2s ease-in 0s forwards;
+    animation: fadeIn 3s ease-in 0s forwards;
   }
   .L-text {
     position: absolute;
@@ -118,7 +117,7 @@ const wrapper = styled.aside`
 
     line-height: min(10vw, 81px);
 
-    color: transparent;
+    color:  #ab89c7;
     -webkit-text-stroke: 0.3px rgba(255, 255, 255, 0.497);
 
     transform: translateY(-25px);
@@ -141,6 +140,7 @@ const wrapper = styled.aside`
     font-size: 0.7rem;
     letter-spacing: 2px;
     font-weight: bold;
+    color: #ab89c7;
   }
 
   .container-center {
@@ -585,7 +585,7 @@ const wrapper = styled.aside`
     &>.footer-content{
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: space-evenly;
       align-items: center;
       padding-bottom: 50px;
 

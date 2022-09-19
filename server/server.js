@@ -22,7 +22,7 @@ const authenticateUser = require("./middlewares/auth.js");
 
 const { createSocketServer } = require("./socket/socketServer");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 app.use(express.json());
@@ -60,7 +60,7 @@ mongoose
     .connect(MONGO_URI)
     .then(() => {
 
-        server.listen(PORT, () => {
+        server.listen(PORT, '192.168.101.14', () => {
             console.log(`SERVER STARTED ON ${PORT}.....!`);
         });
     })

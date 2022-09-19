@@ -1,11 +1,40 @@
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 const { updateChatHistory } = require("./notifyConnectedSockets");
+var natural = require('natural');
+const { getServerSocketInstance } = require("../socket/connectedUsers");
+
+var tokenizer = new natural.WordTokenizer();
+
+const negativeWords = [
+    'muji',
+    'machikni',
+    'randi',
+    'shit',
+    'bullshit',
+    'fuck',
+    'fucking',
+    'fucker',
+    'fuckers',
+    'geda',
+    'lado',
+    'puti',
+    'khatey',
+    'jathi',
+    'jatho',
+    'sale',
+    'rando'
+  ]
 
 const directMessageHandler = async (socket, data) => {
     try {
         
         const { receiverUserId, message } = data;
+        const negativeMsg = tokenizer.tokenize(message)
+        const isnegativeMsg = negativeWords.filter(element => negativeMsg.includes(element));
+        if(isnegativeMsg.length > 0 ){
+            updateChatHistory('rand', null,true);
+        }
         const senderUserId = socket.user.userId;
         console.log(senderUserId, receiverUserId)
         const newMessage = await Message.create({

@@ -4,18 +4,54 @@ const User = require("../models/User");
 const { BAD_REQUESTError } = require("../errors/index.js");
 const { StatusCodes } = require("http-status-codes");
 const checkPermissions = require("../utils/checkPermissions.js");
+var natural = require('natural');
 
+var tokenizer = new natural.WordTokenizer();
 //const { fileURLToPath } = require("url");
 const path = require("path");
 const CompanyRegistered = require("../models/CompanyRegistered.js");
 
 // const __filename = fileURLToPath(import.meta.url);
 //const __dirname = path.dirname(__filename);
+const negativeWords = [
+  'muji',
+  'machikni',
+  'randi',
+  'shit',
+  'bullshit',
+  'fuck',
+  'fucking',
+  'fucker',
+  'fuckers',
+  'geda',
+  'lado',
+  'puti',
+  'khatey',
+  'jathi',
+  'jatho',
+  'sale',
+  'rando'
+]
 
 const postUpload = async (req, res, next) => {
-  const { location, description } = req.body;
+  const { location, description, companyId } = req.body;
   const userId = req.user.userId;
   const imagelst = [];
+
+  const translatedDesc = tokenizer.tokenize(description)
+  const translatedLoc = tokenizer.tokenize(location)
+  const isnegativeLoc = negativeWords.filter(element => translatedLoc.includes(element));
+  const isnegativeDesc = negativeWords.filter(element => translatedDesc.includes(element));
+
+  if(isnegativeLoc.length > 0 || isnegativeDesc.length > 0) res.status(400).json({
+    status:'failed',
+    message: 'use of foul language. be careful '
+  })
+  if(!companyId) res.status(400).json({
+    status: 'failed',
+    message:'company not found'
+  })
+  
   if(!description){
     return res.status(400).json({ 
       status:'400',
@@ -43,6 +79,7 @@ const postUpload = async (req, res, next) => {
     location: location,
     description,
     userid: userId,
+    companyId: companyId
   });
   if (!post) {
     console.log("throw error");
@@ -116,7 +153,7 @@ const UpdatePost = async (req, res) => {
     throw new NotFoundError(`No post with id ${postId}`);
   }
 
-  if ((req.files === null) & (networkpath.length > 0)) {
+  if ((req.files === null) && (networkpath.length > 0)) {
     console.log("new");
     for (let i = 0; i < networkpath.length; i++) {
       newlist.push(networkpath[i]);

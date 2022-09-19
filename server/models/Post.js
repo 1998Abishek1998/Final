@@ -16,7 +16,8 @@ const PostSchema = new mongoose.Schema(
     },
 
     likesid: { type: Array, default: [] },
-    companyId: [{ type: mongoose.Schema.Types.ObjectId, ref: "CompanyRegistration", required: true  }],
+    commentsid: { type: Array, default: [] },
+    companyId: { type: mongoose.Schema.Types.ObjectId, ref: "CompanyRegistration", required: true  },
     userid: { type: mongoose.Types.ObjectId, ref: "User", required: true },
     saved: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   },

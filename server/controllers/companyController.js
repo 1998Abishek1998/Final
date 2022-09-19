@@ -59,6 +59,22 @@ const getAllCompany = async(req,res) =>{
   }
 }
 
+const getSingleCompany = async(req,res) =>{
+  try {
+    const companyFinder = await CompanyRegistered.findById(req.params.Id)
+     res.status(200).json({
+        status: 'success',
+        data : companyFinder
+    })
+    
+  } catch (error) {
+    res.status(500).json({
+      status: 'Failed',
+      message: 'Could not find company list'
+    })
+  }
+}
+
 const companyApprove = async(req,res) =>{
     try {
        const company = await CompanyRegistered.findOneAndUpdate(
@@ -76,7 +92,7 @@ const companyApprove = async(req,res) =>{
 
         const output = `
             <h5>Welcome to Winkle Media ${CompanyName}</h5>
-            <span>You have sucessfully registered in our system. Click the route for further process <a href='http://localhost:3000/owner/register/${req.params.Id}'>Register Owner</a></span>
+            <span>You have sucessfully registered in our system. Click the route for further process <a href='${req.headers.referer}/owner/register/${req.params.Id}'>Register Owner</a></span>
         `
         const transporter = nodemailer.createTransport({
             service:'gmail',
@@ -100,8 +116,6 @@ const companyApprove = async(req,res) =>{
               console.log('Email sent: ' + info.response);
             }
           });
-
-          console.log("Message sent: %s", info.messageId);
       }
       return res.status(200).json({
         status: 'success',
@@ -250,8 +264,7 @@ const addCompanyEmployee = async(req, res) => {
       password,
       companyId
     });
-    console.log(user,'user')
-    //sender
+
     await User.findOneAndUpdate(
       { _id: req.params.Id },
       {
@@ -266,6 +279,39 @@ const addCompanyEmployee = async(req, res) => {
       },
       { new: true }
     )
+
+    const output = `
+      <h5>Hello ${username} your account has been created at ${emailVerified.CompanyName}.</h5>
+      <span>Click <a href='${req.headers.referer}/'> here</a> to check out the application.</span>
+    `
+    const transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth: {
+        user: process.env.EMAIL_HOST_USER,
+        pass: process.env.EMAIL_HOST_PASSWORD
+    }
+    });
+
+  // send mail with defined transport object
+    let info = transporter.sendMail({
+      from: `WinkleMedia ${process.env.EMAIL_HOST_USER}`, // sender address
+      to: `${email}`, // list of receivers
+      subject: "Node Test ✔", // Subject line
+      text: '', // plain text body
+      html: output, // html body
+    },function(error, info){
+    if (error) {
+      console.log(error);
+      res.status(400).json({
+        status: 'failed',
+        message: 'Mail not sent'
+      })
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
+  console.log("Message sent: %s", info.messageId);
 
     res.status(200).json({
       user: {
@@ -294,5 +340,6 @@ module.exports = {
   companyApprove,
   companyReject,
   companyActive,
-  addCompanyEmployee
+  addCompanyEmployee,
+  getSingleCompany
 };

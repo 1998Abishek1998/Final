@@ -44,7 +44,10 @@ import {
   COMPANY_REJECT_SUCCESS,
   CREATE_COMPANY_EMPLOYEE_REQUEST,
   CREATE_COMPANY_EMPLOYEE_SUCCESS,
-  CREATE_COMPANY_EMPLOYEE_ERROR
+  CREATE_COMPANY_EMPLOYEE_ERROR,
+  GET_COMPANY_REQUEST,
+  GET_COMPANY_SUCCESS,
+  GET_COMPANY_ERROR
 } from "./action";
 
 import { initialState } from "./appContext";
@@ -328,6 +331,24 @@ const reducer = (state, action) => {
     };
   }
 /////
+if (action.type === GET_COMPANY_REQUEST) {
+  return { ...state, isLoading: true };
+}
+if (action.type === GET_COMPANY_SUCCESS) {
+  return {
+    ...state,
+    isLoading: false,
+    singleCompany: action.payload.singleCompany
+  };
+}
+
+if (action.type === GET_COMPANY_ERROR) {
+  return {
+    ...state,
+    isLoading: false,
+  };
+}
+
   if (action.type === COMPANY_APPROVE_REQUEST) {
     return { ...state, isLoading: true };
   }
