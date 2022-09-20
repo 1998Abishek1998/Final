@@ -82,7 +82,7 @@ const initialState = {
 
 const AppContext = React.createContext();
 
-const BASE_URL = "http://192.168.101.14:8080/api/v1"
+const BASE_URL = `http://${process.env.REACT_APP_MAIN_URL}:8080/api/v1`
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
