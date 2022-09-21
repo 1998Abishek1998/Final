@@ -56,7 +56,7 @@ const Profile = () => {
               className="profile-cover"
             />
             <span className="profile-username">{profileUser.username}</span>
-            <Followbtn items={profileUser} clicked={() => ontoggle(6)} />
+            {/* <Followbtn items={profileUser} clicked={() => ontoggle(6)} /> */}
           </div>
           <div className="profile-info">
             <div className="profile-info-content">
@@ -66,7 +66,7 @@ const Profile = () => {
               >
                 Timeline
               </button>
-              <button
+              {/* <button
                 onClick={() => ontoggle(2)}
                 className={tab === 2 ? "tab active" : "tab"}
               >
@@ -77,7 +77,7 @@ const Profile = () => {
                 className={tab === 3 ? "tab active" : "tab"}
               >
                 following
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -101,7 +101,10 @@ const Profile = () => {
             <div className={tab === 5 ? "display-none" : "photo-section"}>
               <div className="photo-section-header">
                 <h1>photo</h1>
-                <button className="no-btn" onClick={() => ontoggle(5)}>
+                <button 
+                className="no-btn" 
+                //onClick={() => ontoggle(5)}
+                >
                   view all
                 </button>
               </div>

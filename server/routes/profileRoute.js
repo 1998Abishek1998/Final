@@ -7,7 +7,7 @@ const {
   userProfile,
 } = require("../controllers/profileController.js");
 
-router.route("/search").get(searchProfile);
+router.route("/user/:companyId/search").get(searchProfile);
 router.route("/updateprofile/:id").put(updateProfile);
 router.route('/:id').get(userProfile)
 module.exports = router;

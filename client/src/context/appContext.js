@@ -364,9 +364,9 @@ const AppProvider = ({ children }) => {
       console.log(e);
     }
   };
-  const searchProfile = async (url) => {
+  const searchProfile = async (url,companyId) => {
     try {
-      const res = await authFetch.get(`/profile/${url}`);
+      const res = await authFetch.get(`/profile/user/${companyId}/${url}`);
       const { users } = res.data;
 
       dispatch({ type: SEARCH_SUCCESS, payload: { users } });

@@ -21,7 +21,15 @@ const userProfile = async (req, res) => {
 };
 
 const searchProfile = async (req, res) => {
-  const users = await User.find({ username: { $regex: req.query.username } })
+  const users = await User.find({ 
+    $and:[
+      {
+        companyId: { $eq: req.params.companyId},
+      },
+      {
+        username: { $regex: req.query.username },
+      }
+  ]})
     .limit(10)
     .select("name username profilePicture");
 

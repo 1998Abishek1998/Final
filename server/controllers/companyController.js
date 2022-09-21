@@ -265,19 +265,27 @@ const addCompanyEmployee = async(req, res) => {
       companyId
     });
 
-    await User.findOneAndUpdate(
-      { _id: req.params.Id },
+    await User.updateMany(
+      { companyId: companyId},
       {
-        $push: { friends: user._id },
+        $addToSet: { friends: user._id },
       },
       { new: true }
     );
-    await User.findOneAndUpdate(
-      { _id: user._id },
-      {
-        $push: { friends: req.params.Id },
-      },
-      { new: true }
+    const companyOwner = await User.findById(req.params.Id)
+    let newFriends = [...companyOwner.friends]
+    let AddFriends = newFriends.concat(req.params.Id)
+    
+    await User.findByIdAndUpdate(
+        { _id: user._id },
+        { $push: { friends: AddFriends}},
+        { new: true}
+    )
+
+    await User.findByIdAndUpdate(
+        { _id: user._id },
+        { $pull: { friends: user._id }},
+        { new: true}
     )
 
     const output = `
@@ -313,7 +321,7 @@ const addCompanyEmployee = async(req, res) => {
 
   console.log("Message sent: %s", info.messageId);
 
-    res.status(200).json({
+  return res.status(200).json({
       user: {
         email: user.email,
         location: user.location,

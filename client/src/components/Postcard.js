@@ -180,11 +180,11 @@ const PostCard = React.memo(({ item }) => {
               <i className="uil uil-share-alt"></i>
             </span>
           </div>
-          <div className="bookmark">
+          {/* <div className="bookmark">
             <span>
               <BsBookmark className="react-icons" />
             </span>
-          </div>
+          </div> */}
         </div>
 
         <div className="liked-by">

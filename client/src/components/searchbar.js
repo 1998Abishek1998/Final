@@ -5,11 +5,10 @@ import { SearchResult } from "../components";
 
 const Searchbar = () => {
   const [search, setSearch] = useState("");
-  const { searchProfile } = useAppContext();
-
+  const { searchProfile, user } = useAppContext();
   useEffect(() => {
     if (search) {
-      searchProfile(`search?username=${search}`);
+      searchProfile(`search?username=${search}`, user.companyId);
     }
   }, [search]);
   return (

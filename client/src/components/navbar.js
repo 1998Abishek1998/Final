@@ -3,16 +3,13 @@ import { useState } from "react";
 import { useAppContext } from "../context/appContext";
 import {Searchbar} from "../components"
 import { Link } from "react-router-dom";
-import { Modal } from "@mui/material";
-import ModalAddPostForm from "./newcomponents/ModalAddPostForm";
+// import ModalAddPostForm from "./newcomponents/ModalAddPostForm";
 
 const Navbar = () => {
   const [showLogout, setShowLogout] = useState(false);
-  const [openPostModal, setOpenPostModal] = useState(false)
   
   const { logoutUser, singleCompany } = useAppContext();
   
-  const handleClose = () => setOpenPostModal(false);
 
   return (
     <>
@@ -26,9 +23,6 @@ const Navbar = () => {
           </h2>
           <Searchbar/>
           <div className="create">
-            <button className="btn btn-purple" onClick={() => setOpenPostModal(!openPostModal)}>
-              Add Post
-            </button>
             <div className="btn-container">
               <button
                 className="profile-picture btn-none"
@@ -56,15 +50,6 @@ const Navbar = () => {
         </div>
       </nav>
     </Wrapper>
-    <Modal
-      keepMounted
-      open={openPostModal}
-      onClose={handleClose}
-      aria-labelledby="keep-mounted-modal-title"
-      aria-describedby="keep-mounted-modal-description"
-    >
-      <ModalAddPostForm handleClose={handleClose}/>
-    </Modal>
     </>
   );
 };
