@@ -98,7 +98,8 @@ const register = async (req, res) => {
         location: user.location,
         name: user.name,
         username:user.username,
-        companyId: user.companyId
+        companyId: user.companyId,
+        role: user.role
       },
       token,
       location: user.location,
