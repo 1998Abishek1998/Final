@@ -60,7 +60,7 @@ mongoose
     .connect(MONGO_URI)
     .then(() => {
 
-        server.listen(PORT, process.env.IP_HOST, () => {
+        server.listen(PORT, () => {
             console.log(`SERVER STARTED ON ${PORT}.....!`);
         });
     })
